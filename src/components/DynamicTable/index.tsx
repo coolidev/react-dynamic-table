@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactTable from "./ReactTable";
 import { Column, TableStructure } from "./utils";
 
-import fakeData from "./data";
+import fakeData from "../../hooks/data";
 
 const DynamicTable = () => {
   const [tableStructure, setTableStructure] = useState<TableStructure>(fakeData.tableStructure);
