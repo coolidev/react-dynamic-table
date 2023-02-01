@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 
-import { Column, ColumnData, Group, RowItem, TableStructure } from "./utils";
+import { Column, ColumnData, RowItem, TableStructure } from "./utils";
 
 interface ReactTableProps {
   tableStructure: TableStructure;
@@ -43,7 +43,7 @@ const ReactTable: FC<ReactTableProps> = ({tableStructure, columnData, children})
       setCellData(cData)
     }
     initialize();
-  }, [tableStructure, columnData])
+  }, [tableStructure, columnData, rowNames])
 
   return (<>
     <table>
@@ -63,7 +63,13 @@ const ReactTable: FC<ReactTableProps> = ({tableStructure, columnData, children})
             <td>{row.name}</td>
             {cellData.map((oneData: any, columnIdx) => {
               const cell = oneData.filter((e: any) => e.rowKey === row.rowKey)[0];
-              return <td key={`cell_${cell !== undefined ? row.rowKey : rowIdx}_${cell !== undefined ? cell.columnKey : columnIdx}`}>
+              const keyString = `cell_${cell !== undefined
+                ? row.rowKey : rowIdx}_${cell !== undefined
+                  ? cell.columnKey : columnIdx}`;
+              return <td
+                key={keyString}
+                className={`${cell === undefined && 'empty'}`}
+              >
                 {cell !== undefined && cell.value}
               </td>
             })}
