@@ -19,7 +19,9 @@ export const ReactTable = () => {
   const [data, setData] = useState<IData[]>([])
 
   useEffect(() => {
+    // Initialize table structure
     const initializeTableStructure = () => {
+      // Columns
       const columnData = fakeData.columnData
       const columns = [
         { key: 'comparison', name: "" },
@@ -28,6 +30,7 @@ export const ReactTable = () => {
         })
       ]
       setColumns(columns);
+      // Rows
       const rowData = fakeData.tableStructure.group;
       const rows = rowData.map((group, idx) => {
         return [{ name: group.name, key: `group_${idx}` }, ...group.items]
@@ -46,7 +49,7 @@ export const ReactTable = () => {
         return { key: row.key, colKey: column.key, value: row.value }
       })
     })
-    columnData.unshift(comparison)
+    columnData.unshift(comparison) // combine row names to data
 
     const data = columnData[0].map((rowKey, idx) => {
       return columnData.map(row => {
