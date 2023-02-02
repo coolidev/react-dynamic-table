@@ -1,7 +1,8 @@
-import { IColumnType } from "./Table";
+import { IActionType, IColumnType } from "./Table";
 
 interface Props<T> {
   columns: IColumnType<T>[];
+  actions?: IActionType;
 }
 
 // const TableHeaderCell = styled("th", {
@@ -19,7 +20,7 @@ interface Props<T> {
 //   },
 // });
 
-export function TableHeader<T>({ columns }: Props<T>): JSX.Element {
+export function TableHeader<T>({ columns, actions }: Props<T>): JSX.Element {
   return (
     <tr>
       {columns.map((column, columnIndex) => (
@@ -28,6 +29,7 @@ export function TableHeader<T>({ columns }: Props<T>): JSX.Element {
           style={{ width: column.width }}
         >
           {column.name}
+          {column.removeEnabled && (<span onClick={() => {actions?.deleteColumn(column.key)}}>x</span>)}
         </th>
       ))}
     </tr>

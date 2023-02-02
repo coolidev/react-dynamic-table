@@ -47,8 +47,15 @@ const fakeData = {
       key: "column2",
       data: [
       ]
+    },
+    {
+      name: "Column 3",
+      key: "column3",
+      data: [
+      ]
     }
-  ]
+  ],
+  columnSequence: ["column3", "column1"]
 }
 
 export default fakeData;
