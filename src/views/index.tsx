@@ -14,19 +14,19 @@ interface IRowType<T> {
   render?: (row: IRowType<T>, item: T) => void;
 }
 
-interface ICellType<T> {
-  key: string;
-  colKey: string;
-  value: string;
-  rowBreakdownOptions?: string[];
-  render?: (cell: ICellType<T>, item: T) => void;
-}
-
-interface IRowBreakdownOption<T> {
+export interface IRowBreakdownOption<T> {
   key: string;
   name: string;
   action: Function;
   render?: (option: IRowBreakdownOption<T>, item: T) => void;
+}
+
+interface ICellType<T> {
+  key: string;
+  colKey: string;
+  value: string;
+  rowBreakdownOptions?: IRowBreakdownOption<IData>[];
+  render?: (cell: ICellType<T>, item: T) => void;
 }
 
 export const ReactTable = () => {
@@ -76,7 +76,10 @@ export const ReactTable = () => {
       setColumns(columnsBuffer);
       // Column sequence
       const sequenceData = fakeData.columnSequence;
-      setSortString(sequenceData.toString())
+      setSortString(sequenceData.toString());
+      // Row Breakdown options
+      const optionsData = fakeData.tableStructure.rowBreakdownOptions;
+      setRowBreakdownOptions(optionsData);
       // Row names
       const rowData = fakeData.tableStructure.group;
       const rows = rowData.map((group, idx) => {
@@ -84,7 +87,7 @@ export const ReactTable = () => {
           {
             name: group.name,
             key: `group_${idx}`
-          }, ...group.items]
+          }, ...group.items];
       }).flat();
       setRowNames(rows);
     }
@@ -100,6 +103,9 @@ export const ReactTable = () => {
             colKey: "comparison",
             value: row.name,
             rowBreakdownOptions: row.rowBreakdownOptions
+                  ? row.rowBreakdownOptions
+                    .map((key) => (rowBreakdownOptions.filter((option) => option.key === key)[0]))
+                  : undefined
           }
         })
         // fetch data initially
@@ -142,9 +148,10 @@ export const ReactTable = () => {
       }
     }
     handleData()
-  }, [columns, rowNames, cellData, pageLoaded])
+  }, [columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
 
   useEffect(() => {
+    console.log(cellData)
     if (cellData.length) {
       setPageLoaded(true)
     }

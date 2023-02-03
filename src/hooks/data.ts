@@ -28,8 +28,7 @@ const fakeData = {
           },
           {
             name: "Item 4",
-            key: "key4",
-            rowBreakdownOptions: []
+            key: "key4"
           },
         ]
       }
