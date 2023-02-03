@@ -5,17 +5,49 @@ const fakeData = {
         info: null,
         name: "Group 1",
         items: [
-          {name: "Item 1", key: "key1"},
-          {name: "Item 2", key: "key2"},
+          {
+            name: "Item 1",
+            key: "key1",
+            rowBreakdownOptions: ['option1']
+          },
+          {
+            name: "Item 2",
+            key: "key2",
+            rowBreakdownOptions: ['option2']
+          },
         ]
       },
       {
         info: null,
         name: "Group 2",
         items: [
-          {name: "Item 3", key: "key3"},
-          {name: "Item 4", key: "key4"},
+          {
+            name: "Item 3",
+            key: "key3",
+            rowBreakdownOptions: ['option1', 'option2']
+          },
+          {
+            name: "Item 4",
+            key: "key4",
+            rowBreakdownOptions: []
+          },
         ]
+      }
+    ],
+    rowBreakdownOptions: [
+      {
+        key: "option1",
+        name: "Option 1",
+        action: (rowKey: string) => {
+          console.log("Option 1", rowKey);
+        }
+      },
+      {
+        key: "option2",
+        name: "Option 2",
+        action: (rowKey: string) => {
+          console.log("Option 2", rowKey);
+        }
       }
     ]
   },

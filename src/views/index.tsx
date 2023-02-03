@@ -9,14 +9,23 @@ interface IData {
 export interface IRowType<T> {
   key: string;
   name: string;
+  rowBreakdownOptions?: string[];
   height?: number;
   render?: (row: IRowType<T>, item: T) => void;
+}
+
+interface IRowBreakdownOption<T> {
+  key: string;
+  name: string;
+  action: Function;
+  render?: (option: IRowBreakdownOption<T>, item: T) => void;
 }
 
 export const ReactTable = () => {
   const [columns, setColumns] = useState<IColumnType<IData>[]>([])
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
-  const [data, setData] = useState<IData[]>([])
+  const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
+  const [cellData, setData] = useState<IData[]>([])
   const [columnSequence, setColumnSequence] = useState<string[]>([])
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
   const [sortString, setSortString] = useState<string>('')
@@ -24,7 +33,7 @@ export const ReactTable = () => {
   const deleteColumn = (columnKey: string) => {
     const columnsBuffer = columns;
     setColumns(columnsBuffer.filter((column) => column.key !== columnKey))
-    const dataBuffer = data;
+    const dataBuffer = cellData;
     const newData = dataBuffer.map((row) => {
       delete row[columnKey];
       return row;
@@ -60,6 +69,7 @@ export const ReactTable = () => {
       // Column sequence
       const sequenceData = fakeData.columnSequence;
       setSortString(sequenceData.toString())
+      // Row names
       const rowData = fakeData.tableStructure.group;
       const rows = rowData.map((group, idx) => {
         return [{ name: group.name, key: `group_${idx}` }, ...group.items]
@@ -72,17 +82,28 @@ export const ReactTable = () => {
   useEffect(() => {
     const handleData = () => {
       if (!pageLoaded) {
-        const comparison = rowNames.map((row) => {
-          return { key: row.key, colKey: "comparison", value: row.name }
+        const comparison = rowNames.map((row: IRowType<IData>) => {
+          return {
+            key: row.key,
+            colKey: "comparison",
+            value: row.name,
+            rowBreakdownOptions: row.rowBreakdownOptions
+          }
         })
+        // fetch data initially
         const columnData = fakeData.columnData.map((column) => {
           return column.data.map((row) => {
-            return { key: row.key, colKey: column.key, value: row.value }
+            return {
+              key: row.key,
+              colKey: column.key,
+              value: row.value
+            }
           })
         })
-        columnData.unshift(comparison) // combine row names to data
+        // combine row names to data
+        columnData.unshift(comparison)
   
-        const data = columnData[0].map((rowKey, idx) => {
+        const processed = columnData[0].map((rowKey, idx) => {
           return columnData.map(row => {
             return row.filter((cell) => cell.key === rowKey.key)[0]
           })
@@ -97,7 +118,7 @@ export const ReactTable = () => {
           })
           return cellData
         })
-        setData(data)
+        setData(processed)
       } else {
         // Todo: need to manage table data
         // const columnData = [...data]
@@ -105,13 +126,13 @@ export const ReactTable = () => {
       }
     }
     handleData()
-  }, [columns, rowNames, data, pageLoaded])
+  }, [columns, rowNames, cellData, pageLoaded])
 
   useEffect(() => {
-    if (data.length) {
+    if (cellData.length) {
       setPageLoaded(true)
     }
-  }, [data])
+  }, [cellData])
 
   useEffect(() => {
     const handleColumnSequence = () => {
@@ -128,7 +149,7 @@ export const ReactTable = () => {
   }, [sortString, columns])
   
   return <>
-      <Table data={data} columns={columns} actions={{ deleteColumn: deleteColumn}} />
+      <Table data={cellData} columns={columns} actions={{ deleteColumn: deleteColumn}} />
       <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
       <button onClick={sortColumn}>Sort</button>
     </>;
