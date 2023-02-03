@@ -6,12 +6,20 @@ interface IData {
   [key: string]: string;
 }
 
-export interface IRowType<T> {
+interface IRowType<T> {
   key: string;
   name: string;
   rowBreakdownOptions?: string[];
   height?: number;
   render?: (row: IRowType<T>, item: T) => void;
+}
+
+interface ICellType<T> {
+  key: string;
+  colKey: string;
+  value: string;
+  rowBreakdownOptions?: string[];
+  render?: (cell: ICellType<T>, item: T) => void;
 }
 
 interface IRowBreakdownOption<T> {
@@ -25,7 +33,7 @@ export const ReactTable = () => {
   const [columns, setColumns] = useState<IColumnType<IData>[]>([])
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
-  const [cellData, setData] = useState<IData[]>([])
+  const [cellData, setCellData] = useState<IData[]>([])
   const [columnSequence, setColumnSequence] = useState<string[]>([])
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
   const [sortString, setSortString] = useState<string>('')
@@ -38,7 +46,7 @@ export const ReactTable = () => {
       delete row[columnKey];
       return row;
     })
-    setData(newData);
+    setCellData(newData);
   }
 
   const sortColumn = () => {
@@ -72,7 +80,11 @@ export const ReactTable = () => {
       // Row names
       const rowData = fakeData.tableStructure.group;
       const rows = rowData.map((group, idx) => {
-        return [{ name: group.name, key: `group_${idx}` }, ...group.items]
+        return [
+          {
+            name: group.name,
+            key: `group_${idx}`
+          }, ...group.items]
       }).flat();
       setRowNames(rows);
     }
@@ -82,7 +94,7 @@ export const ReactTable = () => {
   useEffect(() => {
     const handleData = () => {
       if (!pageLoaded) {
-        const comparison = rowNames.map((row: IRowType<IData>) => {
+        const comparison = rowNames.map((row: IRowType<IData>): ICellType<IData> => {
           return {
             key: row.key,
             colKey: "comparison",
@@ -92,7 +104,7 @@ export const ReactTable = () => {
         })
         // fetch data initially
         const columnData = fakeData.columnData.map((column) => {
-          return column.data.map((row) => {
+          return column.data.map((row: IData): ICellType<IData> => {
             return {
               key: row.key,
               colKey: column.key,
@@ -102,27 +114,31 @@ export const ReactTable = () => {
         })
         // combine row names to data
         columnData.unshift(comparison)
-  
+
         const processed = columnData[0].map((rowKey, idx) => {
           return columnData.map(row => {
             return row.filter((cell) => cell.key === rowKey.key)[0]
           })
         }).map((row) => {
-          let cellData = {}
+          let grouped = {}
           row.filter(cell => cell !== undefined).map((cell) => {
-            cellData = {
-              ...cellData,
+            grouped = {
+              ...grouped,
               [cell.colKey]: cell.value
             }
             return { [cell.colKey]: cell.value }
           })
-          return cellData
+          grouped = {
+            ...grouped,
+            rowBreakdownOptions: row[0].rowBreakdownOptions
+          }
+          return grouped
         })
-        setData(processed)
+        setCellData(processed)
       } else {
         // Todo: need to manage table data
         // const columnData = [...data]
-        // setData(columnData)
+        // setCellData(columnData)
       }
     }
     handleData()
@@ -147,7 +163,7 @@ export const ReactTable = () => {
   
     handleColumnSequence();
   }, [sortString, columns])
-  
+
   return <>
       <Table data={cellData} columns={columns} actions={{ deleteColumn: deleteColumn}} />
       <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
