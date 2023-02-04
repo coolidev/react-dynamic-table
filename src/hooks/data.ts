@@ -38,14 +38,14 @@ const fakeData = {
         key: "option1",
         name: "Option 1",
         action: (rowKey: string) => {
-          console.log(rowKey);
+          alert(rowKey);
         }
       },
       {
         key: "option2",
         name: "Option 2",
         action: (rowKey: string) => {
-          console.log(rowKey);
+          alert(rowKey);
         }
       }
     ]
