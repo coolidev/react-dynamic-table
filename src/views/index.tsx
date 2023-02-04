@@ -151,7 +151,6 @@ export const ReactTable = () => {
   }, [columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
 
   useEffect(() => {
-    console.log(cellData)
     if (cellData.length) {
       setPageLoaded(true)
     }
