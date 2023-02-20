@@ -26,6 +26,7 @@ export function ReactTableHeader<T>({ columns, actions }: Props<T>): JSX.Element
         <th
           key={`table-head-cell-${columnIndex}`}
           style={{ width: column.width }}
+          colSpan={2}
         >
           {column.name}
           {column.removeEnabled && (<DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} />)}

@@ -35,6 +35,8 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   const [contextItems, setContextItems] = useState<IContextItem[]>([])
   const [isRowHeader, setIsRowHeader] = useState<boolean>(false)
   const value = lodash.get(item, column.key);
+  const input = lodash.get<typeof item, string>(item, `input_${column.key}`)
+  const output = lodash.get<typeof item, string>(item, `output_${column.key}`)
   
   useEffect(() => {
     if (column.key === 'comparison') {
@@ -69,23 +71,35 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
 }
   
   return (<>
-      <td id={isRowHeader ? `context-menu-${index}` : ''} className={classes.root}
-        style={{
-          fontSize: lodash.get(item, 'isGroup') === true ? '1.25rem' : '0.875rem',
-        }}>
-        {column.render ? column.render(column, item) : value}
-        {isRowHeader && contextItems.length > 0 && <>
-            <ArrowDropDownIcon />
-            <ContextMenu
-              dataSource={contextItems}
-              width={200}
-              target={`#context-menu-${index}`}
-              itemRender={renderItem}
-              onItemClick={handleSelectOption}
-              style={{ position: 'absolute' }}
-            />
-          </>}
-      </td>
+      {isRowHeader ? (
+        <td
+          id={`context-menu-${index}`}
+          colSpan={2}
+          className={classes.root}
+          style={{
+            fontSize: lodash.get(item, 'isGroup') === true ? '1.25rem' : '0.875rem',
+          }}>
+            {column.render ? column.render(column, item) : value}
+            {contextItems.length > 0 && <>
+              <ArrowDropDownIcon />
+              <ContextMenu
+                dataSource={contextItems}
+                width={200}
+                target={`#context-menu-${index}`}
+                itemRender={renderItem}
+                onItemClick={handleSelectOption}
+                style={{ position: 'absolute' }}
+              />
+            </>}
+        </td>) : (<>
+            <td>
+              {input}
+            </td>
+            <td>
+              {output}
+            </td>
+          </>
+        )}
     </>
   );
 }

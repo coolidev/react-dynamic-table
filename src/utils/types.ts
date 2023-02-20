@@ -38,7 +38,9 @@ export interface IRowBreakdownOption<T> {
 export interface ICellType<T> {
   key: string;
   colKey: string;
-  value: string;
+  value?: string;
+  input?: string;
+  output?: string;
   isGroup?: boolean;
   rowBreakdownOptions?: IRowBreakdownOption<IData>[];
   render?: (cell: ICellType<T>, item: T) => void;

@@ -139,7 +139,9 @@ const CompareTable: FC<CompareTableProps> = ({
             return {
               key: row.key,
               colKey: column.key,
-              value: row.value
+              value: row.value,
+              input: row.input,
+              output: row.output
             }
           })
         })
@@ -156,9 +158,14 @@ const CompareTable: FC<CompareTableProps> = ({
             grouped = {
               ...grouped,
               [cell.colKey]: cell.value,
+              [`input_${cell.colKey}`]: cell.input,
+              [`output_${cell.colKey}`]: cell.output,
               isGroup: cell.isGroup
             }
-            return { [cell.colKey]: cell.value }
+            return {
+              [cell.colKey]: cell.value,
+              [`input_${cell.colKey}`]: cell.input,
+              [`output_${cell.colKey}`]: cell.output }
           })
           grouped = {
             ...grouped,
