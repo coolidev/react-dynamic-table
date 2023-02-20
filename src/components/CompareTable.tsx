@@ -102,6 +102,10 @@ const CompareTable: FC<CompareTableProps> = ({
   }
 
   useEffect(() => {
+    setPageLoaded(false);
+  }, [status])
+
+  useEffect(() => {
     if (source !== undefined) {
       // Columns
       const columnData = source.columnData
@@ -134,52 +138,58 @@ const CompareTable: FC<CompareTableProps> = ({
 
   useEffect(() => {
     const handleData = () => {
-      const comparison = rowNames.map((row: IRowType<IData>): ICellType<IData> => {
-        return {
-          key: row.key,
-          colKey: "comparison",
-          value: row.name,
-          isGroup: row.isGroup,
-          rowBreakdownOptions: row.rowBreakdownOptions
-                ? row.rowBreakdownOptions
-                  .map((key) => (rowBreakdownOptions.filter((option) => option.key === key)[0]))
-                : undefined
-        }
-      })
-      // fetch data initially
-      const columnData = source.columnData.map((column) => {
-        return column.data.map((row: IData): ICellType<IData> => {
+      if (!pageLoaded) {
+        const comparison = rowNames.map((row: IRowType<IData>): ICellType<IData> => {
           return {
             key: row.key,
-            colKey: column.key,
-            value: row.value
+            colKey: "comparison",
+            value: row.name,
+            isGroup: row.isGroup,
+            rowBreakdownOptions: row.rowBreakdownOptions
+                  ? row.rowBreakdownOptions
+                    .map((key) => (rowBreakdownOptions.filter((option) => option.key === key)[0]))
+                  : undefined
           }
         })
-      })
-      // combine row names to data
-      columnData.unshift(comparison)
-
-      const processed = columnData[0].map((rowKey, idx) => {
-        return columnData.map(row => {
-          return row.filter((cell) => cell.key === rowKey.key)[0]
+        // fetch data initially
+        const columnData = source.columnData.map((column) => {
+          return column.data.map((row: IData): ICellType<IData> => {
+            return {
+              key: row.key,
+              colKey: column.key,
+              value: row.value
+            }
+          })
         })
-      }).map((row) => {
-        let grouped = {}
-        row.filter(cell => cell !== undefined).map((cell) => {
+        // combine row names to data
+        columnData.unshift(comparison)
+
+        const processed = columnData[0].map((rowKey, idx) => {
+          return columnData.map(row => {
+            return row.filter((cell) => cell.key === rowKey.key)[0]
+          })
+        }).map((row) => {
+          let grouped = {}
+          row.filter(cell => cell !== undefined).map((cell) => {
+            grouped = {
+              ...grouped,
+              [cell.colKey]: cell.value,
+              isGroup: cell.isGroup
+            }
+            return { [cell.colKey]: cell.value }
+          })
           grouped = {
             ...grouped,
-            [cell.colKey]: cell.value,
-            isGroup: cell.isGroup
+            rowBreakdownOptions: row[0].rowBreakdownOptions
           }
-          return { [cell.colKey]: cell.value }
+          return grouped
         })
-        grouped = {
-          ...grouped,
-          rowBreakdownOptions: row[0].rowBreakdownOptions
-        }
-        return grouped
-      })
-      setCellData(processed)
+        setCellData(processed)
+      } else {
+        // Todo: need to manage table data
+        // const columnData = [...data]
+        // setCellData(columnData)
+      }
     }
     if (source !== undefined) {
       handleData()
