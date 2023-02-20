@@ -59,6 +59,14 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
       fn(e.itemData.key)
     }
   }
+
+  const renderItem = (data: IContextItem, index: number) => {
+    return (
+      <div key={data.key}>
+        <span>{data.text}</span>
+      </div>
+    );
+}
   
   return (<>
       <td id={isRowHeader ? `context-menu-${index}` : ''} className={classes.root}
@@ -72,6 +80,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
               dataSource={contextItems}
               width={200}
               target={`#context-menu-${index}`}
+              itemRender={renderItem}
               onItemClick={handleSelectOption}
               style={{ position: 'absolute' }}
             />

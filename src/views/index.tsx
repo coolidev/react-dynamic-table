@@ -25,6 +25,8 @@ const Comparison: FC = () => {
     columnSequence: []
   });
   const [status, setStatus] = useState(initialStatus);
+  const [sortString, setSortString] = useState<string>('')
+  const [columnSequence, setColumnSequence] = useState<string[]>([])
 
   const [initialData, setInitialData] = useState<IComparisonType>({
     tableStructure: {
@@ -39,6 +41,18 @@ const Comparison: FC = () => {
     setStatus({ ...status, page })
   };
 
+  const sortColumn = () => {
+    const tData = {...initialData}
+    const columnsBuffer = [...initialData.columnData];
+    const sortedColumns = columnsBuffer.sort((column1, column2) => {
+      const idx1 = columnSequence.indexOf(column1.key)
+      const idx2 = columnSequence.indexOf(column2.key)
+      return idx1 - idx2;
+    })
+    tData.columnData = sortedColumns
+    setInitialData(tData)
+  }
+
   useEffect(() => {
     const initializeData = async () => {
       try {
@@ -49,6 +63,9 @@ const Comparison: FC = () => {
           ...prevState,
           totalPage: Math.ceil(fakeData.columnData.length / status.perPage),
         }))
+        // Column sequence
+        const sequenceData = fakeData.columnSequence;
+        setSortString(sequenceData.toString());
       }
       catch (e) {
         console.log(e)
@@ -69,6 +86,20 @@ const Comparison: FC = () => {
     }
   }, [initialData, status])
 
+  useEffect(() => {
+    const handleColumnSequence = () => {
+      const sequenceData = sortString.split(',');
+      const columnData = [...initialData.columnData];
+      sequenceData.push(...columnData.map((column) => column.key));
+      const buffer = sequenceData.filter((c, index) => {
+        return sequenceData.indexOf(c) === index;
+      });
+      setColumnSequence(buffer);
+    }
+  
+    handleColumnSequence();
+  }, [sortString])
+
   return (<>
     <Pagination
       page={status.page}
@@ -84,6 +115,8 @@ const Comparison: FC = () => {
       status={status}
       source={source}
     />
+    <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
+    <button onClick={sortColumn}>Sort</button>
   </>
   );
 };

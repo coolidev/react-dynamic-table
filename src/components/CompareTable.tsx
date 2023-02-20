@@ -73,9 +73,7 @@ const CompareTable: FC<CompareTableProps> = ({
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
   const [cellData, setCellData] = useState<IData[]>([])
-  const [columnSequence, setColumnSequence] = useState<string[]>([])
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
-  const [sortString, setSortString] = useState<string>('')
   
   const deleteColumn = (columnKey: string) => {
     const columnsBuffer = columns;
@@ -86,19 +84,6 @@ const CompareTable: FC<CompareTableProps> = ({
       return row;
     })
     setCellData(newData);
-  }
-
-  const sortColumn = () => {
-    const columnsBuffer = [...columns];
-    const sortedColumns = columnsBuffer.sort((column1, column2) => {
-      const idx1 = columnSequence.indexOf(column1.key)
-      const idx2 = columnSequence.indexOf(column2.key)
-      if (column2.key === 'comparison') {
-        return 0;
-      }
-      return idx1 - idx2;
-    })
-    setColumns(sortedColumns)
   }
 
   useEffect(() => {
@@ -116,9 +101,6 @@ const CompareTable: FC<CompareTableProps> = ({
         })
       ]
       setColumns(columnsBuffer);
-      // Column sequence
-      const sequenceData = source.columnSequence;
-      setSortString(sequenceData.toString());
       // Row Breakdown options
       const optionsData = source.tableStructure.rowBreakdownOptions;
       setRowBreakdownOptions(optionsData);
@@ -202,25 +184,9 @@ const CompareTable: FC<CompareTableProps> = ({
     }
   }, [cellData])
 
-  useEffect(() => {
-    const handleColumnSequence = () => {
-      const sequenceData = sortString.split(',');
-      const columnData = [...columns];
-      sequenceData.push(...columnData.map((column) => column.key).filter((column) => column !== 'comparison'));
-      const buffer = sequenceData.filter((c, index) => {
-        return sequenceData.indexOf(c) === index;
-      });
-      setColumnSequence(buffer);
-    }
-  
-    handleColumnSequence();
-  }, [sortString, columns])
-
   return (
     <div data-rank-table='true' className={classes.root}>
       <ReactTable data={cellData} columns={columns} actions={{ deleteColumn: deleteColumn}} />
-      <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
-      <button onClick={sortColumn}>Sort</button>
     </div>
   );
 };

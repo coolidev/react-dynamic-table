@@ -749,7 +749,7 @@ const fakeData: IComparisonType = {
       ]
     }
   ],
-  columnSequence: ["column3", "column1"]
+  columnSequence: ["project2", "project4", "project3"]
 }
 
 export default fakeData;
