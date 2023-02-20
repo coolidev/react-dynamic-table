@@ -5,3 +5,7 @@
 .App > table {
   margin: 1rem auto;
 }
+
+.dx-state-invisible {
+  display: none;
+}

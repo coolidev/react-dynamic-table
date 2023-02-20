@@ -1,178 +1,75 @@
-import { useEffect, useState } from "react";
-import { Table, IColumnType } from "../components/ReactTable/Table";
-import fakeData from "../hooks/data";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, useEffect, useState } from 'react';
+import CompareTable from '../components/CompareTable';
+import { IComparisonType, Status } from '../utils/types';
 
-interface IData {
-  [key: string]: string;
-}
+import fakeData from '../hooks/data';
 
-interface IRowType<T> {
-  key: string;
-  name: string;
-  rowBreakdownOptions?: string[];
-  height?: number;
-  render?: (row: IRowType<T>, item: T) => void;
-}
+const initialStatus: Status = {
+  page: 1,
+  perPage: 5,
+  totalPage: 1,
+  isSize: true,
+  width: '150px',
+  disabled: false,
+};
 
-export interface IRowBreakdownOption<T> {
-  key: string;
-  name: string;
-  action: Function;
-  render?: (option: IRowBreakdownOption<T>, item: T) => void;
-}
+const Comparison: FC = () => {
+  const [source, setSource] = useState<IComparisonType>({
+    tableStructure: {
+      group: [],
+      rowBreakdownOptions: []
+    },
+    columnData: [],
+    columnSequence: []
+  });
+  const [status, setStatus] = useState(initialStatus);
 
-interface ICellType<T> {
-  key: string;
-  colKey: string;
-  value: string;
-  rowBreakdownOptions?: IRowBreakdownOption<IData>[];
-  render?: (cell: ICellType<T>, item: T) => void;
-}
-
-export const ReactTable = () => {
-  const [columns, setColumns] = useState<IColumnType<IData>[]>([])
-  const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
-  const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
-  const [cellData, setCellData] = useState<IData[]>([])
-  const [columnSequence, setColumnSequence] = useState<string[]>([])
-  const [pageLoaded, setPageLoaded] = useState<boolean>(false)
-  const [sortString, setSortString] = useState<string>('')
-
-  const deleteColumn = (columnKey: string) => {
-    const columnsBuffer = columns;
-    setColumns(columnsBuffer.filter((column) => column.key !== columnKey))
-    const dataBuffer = cellData;
-    const newData = dataBuffer.map((row) => {
-      delete row[columnKey];
-      return row;
-    })
-    setCellData(newData);
-  }
-
-  const sortColumn = () => {
-    const columnsBuffer = [...columns];
-    const sortedColumns = columnsBuffer.sort((column1, column2) => {
-      const idx1 = columnSequence.indexOf(column1.key)
-      const idx2 = columnSequence.indexOf(column2.key)
-      if (column2.key === 'comparison') {
-        return 0;
-      }
-      return idx1 - idx2;
-    })
-    setColumns(sortedColumns)
-  }
+  const [initialData, setInitialData] = useState<IComparisonType>({
+    tableStructure: {
+      group: [],
+      rowBreakdownOptions: []
+    },
+    columnData: [],
+    columnSequence: []
+  })
 
   useEffect(() => {
-    // Initialize table structure
-    const initializeTableStructure = () => {
-      // Columns
-      const columnData = fakeData.columnData
-      const columnsBuffer = [
-        { key: 'comparison', name: "" },
-        ...columnData.map((column) => {
-          return { key: column.key, name: column.name, removeEnabled: true }
-        })
-      ]
-      setColumns(columnsBuffer);
-      // Column sequence
-      const sequenceData = fakeData.columnSequence;
-      setSortString(sequenceData.toString());
-      // Row Breakdown options
-      const optionsData = fakeData.tableStructure.rowBreakdownOptions;
-      setRowBreakdownOptions(optionsData);
-      // Row names
-      const rowData = fakeData.tableStructure.group;
-      const rows = rowData.map((group, idx) => {
-        return [
-          {
-            name: group.name,
-            key: `group_${idx}`
-          }, ...group.items];
-      }).flat();
-      setRowNames(rows);
+    const initializeData = async () => {
+      try {
+        // const fetchInitialData = await axios.post<IComparisonType>('/requestComparison', params);
+
+        setInitialData(fakeData)
+        setStatus((prevState) => ({
+          ...prevState,
+          page: Math.ceil(fakeData.columnData.length / status.perPage)
+        }))
+      }
+      catch (e) {
+        console.log(e)
+        throw e;
+      }
     }
-    initializeTableStructure();
+    initializeData();
   }, [])
 
   useEffect(() => {
-    const handleData = () => {
-      if (!pageLoaded) {
-        const comparison = rowNames.map((row: IRowType<IData>): ICellType<IData> => {
-          return {
-            key: row.key,
-            colKey: "comparison",
-            value: row.name,
-            rowBreakdownOptions: row.rowBreakdownOptions
-                  ? row.rowBreakdownOptions
-                    .map((key) => (rowBreakdownOptions.filter((option) => option.key === key)[0]))
-                  : undefined
-          }
-        })
-        // fetch data initially
-        const columnData = fakeData.columnData.map((column) => {
-          return column.data.map((row: IData): ICellType<IData> => {
-            return {
-              key: row.key,
-              colKey: column.key,
-              value: row.value
-            }
-          })
-        })
-        // combine row names to data
-        columnData.unshift(comparison)
-
-        const processed = columnData[0].map((rowKey, idx) => {
-          return columnData.map(row => {
-            return row.filter((cell) => cell.key === rowKey.key)[0]
-          })
-        }).map((row) => {
-          let grouped = {}
-          row.filter(cell => cell !== undefined).map((cell) => {
-            grouped = {
-              ...grouped,
-              [cell.colKey]: cell.value
-            }
-            return { [cell.colKey]: cell.value }
-          })
-          grouped = {
-            ...grouped,
-            rowBreakdownOptions: row[0].rowBreakdownOptions
-          }
-          return grouped
-        })
-        setCellData(processed)
-      } else {
-        // Todo: need to manage table data
-        // const columnData = [...data]
-        // setCellData(columnData)
+    if (initialData !== undefined) {
+      const buffer = {
+        tableStructure: initialData.tableStructure,
+        columnData: initialData.columnData.filter((column, index) => index >= (status.page - 1) * status.perPage && index < status.page * status.perPage),
+        columnSequence: initialData.columnSequence
       }
+      setSource(buffer)
     }
-    handleData()
-  }, [columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
+  }, [initialData, status])
 
-  useEffect(() => {
-    if (cellData.length) {
-      setPageLoaded(true)
-    }
-  }, [cellData])
-
-  useEffect(() => {
-    const handleColumnSequence = () => {
-      const sequenceData = sortString.split(',');
-      const columnData = [...columns];
-      sequenceData.push(...columnData.map((column) => column.key).filter((column) => column !== 'comparison'));
-      const buffer = sequenceData.filter((c, index) => {
-        return sequenceData.indexOf(c) === index;
-      });
-      setColumnSequence(buffer);
-    }
-  
-    handleColumnSequence();
-  }, [sortString, columns])
-
-  return <>
-      <Table data={cellData} columns={columns} actions={{ deleteColumn: deleteColumn}} />
-      <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
-      <button onClick={sortColumn}>Sort</button>
-    </>;
+  return (
+    <CompareTable
+      status={status}
+      source={source}
+    />
+  );
 };
+
+export default Comparison;

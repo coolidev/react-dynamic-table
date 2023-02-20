@@ -1,4 +1,6 @@
-const fakeData = {
+import { IComparisonType } from "../utils/types";
+
+const fakeData: IComparisonType = {
   tableStructure : {
     group: [
       {
@@ -37,16 +39,16 @@ const fakeData = {
       {
         key: "option1",
         name: "Option 1",
-        action: (rowKey: string) => {
+        action: `(rowKey) => {
           alert(rowKey);
-        }
+        }`
       },
       {
         key: "option2",
         name: "Option 2",
-        action: (rowKey: string) => {
+        action: `(rowKey) => {
           alert(rowKey);
-        }
+        }`
       }
     ]
   },

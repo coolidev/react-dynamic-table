@@ -1,10 +1,10 @@
 import './App.css';
-import { ReactTable } from './views';
+import Comparison from './views';
 
 function App() {
   return (
     <div className="App">
-      <ReactTable />
+      <Comparison />
     </div>
   );
 }
