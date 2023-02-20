@@ -409,84 +409,84 @@ const fakeData: IComparisonType = {
       key: "project4",
       data: [
         {
-          "key": "key11",
-          "value": "87"
+          key: "key11",
+          value: "87"
         },
         {
-          "key": "key12",
-          "value": "193"
+          key: "key12",
+          value: "193"
         },
         {
-          "key": "key21",
-          "value": "189"
+          key: "key21",
+          value: "189"
         },
         {
-          "key": "key22",
-          "value": "26"
+          key: "key22",
+          value: "26"
         },
         {
-          "key": "key23",
-          "value": "41"
+          key: "key23",
+          value: "41"
         },
         {
-          "key": "key24",
-          "value": "13"
+          key: "key24",
+          value: "13"
         },
         {
-          "key": "key25",
-          "value": "245"
+          key: "key25",
+          value: "245"
         },
         {
-          "key": "key26",
-          "value": "33"
+          key: "key26",
+          value: "33"
         },
         {
-          "key": "key27",
-          "value": "97"
+          key: "key27",
+          value: "97"
         },
         {
-          "key": "key28",
-          "value": "110"
+          key: "key28",
+          value: "110"
         },
         {
-          "key": "key29",
-          "value": "176"
+          key: "key29",
+          value: "176"
         },
         {
-          "key": "key31",
-          "value": "256"
+          key: "key31",
+          value: "256"
         },
         {
-          "key": "key32",
-          "value": "133"
+          key: "key32",
+          value: "133"
         },
         {
-          "key": "key33",
-          "value": "100"
+          key: "key33",
+          value: "100"
         },
         {
-          "key": "key34",
-          "value": "212"
+          key: "key34",
+          value: "212"
         },
         {
-          "key": "key35",
-          "value": "121"
+          key: "key35",
+          value: "121"
         },
         {
-          "key": "key36",
-          "value": "135"
+          key: "key36",
+          value: "135"
         },
         {
-          "key": "key37",
-          "value": "9"
+          key: "key37",
+          value: "9"
         },
         {
-          "key": "key41",
-          "value": "232"
+          key: "key41",
+          value: "232"
         },
         {
-          "key": "key42",
-          "value": "269"
+          key: "key42",
+          value: "269"
         }
       ]
     },
@@ -495,84 +495,84 @@ const fakeData: IComparisonType = {
       key: "project5",
       data: [
         {
-          "key": "key11",
-          "value": "125"
+          key: "key11",
+          value: "125"
         },
         {
-          "key": "key12",
-          "value": "212"
+          key: "key12",
+          value: "212"
         },
         {
-          "key": "key21",
-          "value": "163"
+          key: "key21",
+          value: "163"
         },
         {
-          "key": "key22",
-          "value": "209"
+          key: "key22",
+          value: "209"
         },
         {
-          "key": "key23",
-          "value": "55"
+          key: "key23",
+          value: "55"
         },
         {
-          "key": "key24",
-          "value": "198"
+          key: "key24",
+          value: "198"
         },
         {
-          "key": "key25",
-          "value": "144"
+          key: "key25",
+          value: "144"
         },
         {
-          "key": "key26",
-          "value": "217"
+          key: "key26",
+          value: "217"
         },
         {
-          "key": "key27",
-          "value": "44"
+          key: "key27",
+          value: "44"
         },
         {
-          "key": "key28",
-          "value": "101"
+          key: "key28",
+          value: "101"
         },
         {
-          "key": "key29",
-          "value": "135"
+          key: "key29",
+          value: "135"
         },
         {
-          "key": "key31",
-          "value": "68"
+          key: "key31",
+          value: "68"
         },
         {
-          "key": "key32",
-          "value": "13"
+          key: "key32",
+          value: "13"
         },
         {
-          "key": "key33",
-          "value": "123"
+          key: "key33",
+          value: "123"
         },
         {
-          "key": "key34",
-          "value": "259"
+          key: "key34",
+          value: "259"
         },
         {
-          "key": "key35",
-          "value": "97"
+          key: "key35",
+          value: "97"
         },
         {
-          "key": "key36",
-          "value": "242"
+          key: "key36",
+          value: "242"
         },
         {
-          "key": "key37",
-          "value": "215"
+          key: "key37",
+          value: "215"
         },
         {
-          "key": "key41",
-          "value": "180"
+          key: "key41",
+          value: "180"
         },
         {
-          "key": "key42",
-          "value": "85"
+          key: "key42",
+          value: "85"
         }
       ]
     },
@@ -581,84 +581,84 @@ const fakeData: IComparisonType = {
       key: "project6",
       data: [
         {
-          "key": "key11",
-          "value": "247"
+          key: "key11",
+          value: "247"
         },
         {
-          "key": "key12",
-          "value": "25"
+          key: "key12",
+          value: "25"
         },
         {
-          "key": "key21",
-          "value": "54"
+          key: "key21",
+          value: "54"
         },
         {
-          "key": "key22",
-          "value": "221"
+          key: "key22",
+          value: "221"
         },
         {
-          "key": "key23",
-          "value": "68"
+          key: "key23",
+          value: "68"
         },
         {
-          "key": "key24",
-          "value": "166"
+          key: "key24",
+          value: "166"
         },
         {
-          "key": "key25",
-          "value": "12"
+          key: "key25",
+          value: "12"
         },
         {
-          "key": "key26",
-          "value": "184"
+          key: "key26",
+          value: "184"
         },
         {
-          "key": "key27",
-          "value": "289"
+          key: "key27",
+          value: "289"
         },
         {
-          "key": "key28",
-          "value": "265"
+          key: "key28",
+          value: "265"
         },
         {
-          "key": "key29",
-          "value": "123"
+          key: "key29",
+          value: "123"
         },
         {
-          "key": "key31",
-          "value": "176"
+          key: "key31",
+          value: "176"
         },
         {
-          "key": "key32",
-          "value": "13"
+          key: "key32",
+          value: "13"
         },
         {
-          "key": "key33",
-          "value": "27"
+          key: "key33",
+          value: "27"
         },
         {
-          "key": "key34",
-          "value": "214"
+          key: "key34",
+          value: "214"
         },
         {
-          "key": "key35",
-          "value": "125"
+          key: "key35",
+          value: "125"
         },
         {
-          "key": "key36",
-          "value": "33"
+          key: "key36",
+          value: "33"
         },
         {
-          "key": "key37",
-          "value": "157"
+          key: "key37",
+          value: "157"
         },
         {
-          "key": "key41",
-          "value": "216"
+          key: "key41",
+          value: "216"
         },
         {
-          "key": "key42",
-          "value": "147"
+          key: "key42",
+          value: "147"
         }
       ]
     },
@@ -667,84 +667,84 @@ const fakeData: IComparisonType = {
       key: "project7",
       data: [
         {
-          "key": "key11",
-          "value": "177"
+          key: "key11",
+          value: "177"
         },
         {
-          "key": "key12",
-          "value": "8"
+          key: "key12",
+          value: "8"
         },
         {
-          "key": "key21",
-          "value": "41"
+          key: "key21",
+          value: "41"
         },
         {
-          "key": "key22",
-          "value": "132"
+          key: "key22",
+          value: "132"
         },
         {
-          "key": "key23",
-          "value": "248"
+          key: "key23",
+          value: "248"
         },
         {
-          "key": "key24",
-          "value": "20"
+          key: "key24",
+          value: "20"
         },
         {
-          "key": "key25",
-          "value": "134"
+          key: "key25",
+          value: "134"
         },
         {
-          "key": "key26",
-          "value": "87"
+          key: "key26",
+          value: "87"
         },
         {
-          "key": "key27",
-          "value": "277"
+          key: "key27",
+          value: "277"
         },
         {
-          "key": "key28",
-          "value": "212"
+          key: "key28",
+          value: "212"
         },
         {
-          "key": "key29",
-          "value": "134"
+          key: "key29",
+          value: "134"
         },
         {
-          "key": "key31",
-          "value": "284"
+          key: "key31",
+          value: "284"
         },
         {
-          "key": "key32",
-          "value": "32"
+          key: "key32",
+          value: "32"
         },
         {
-          "key": "key33",
-          "value": "26"
+          key: "key33",
+          value: "26"
         },
         {
-          "key": "key34",
-          "value": "98"
+          key: "key34",
+          value: "98"
         },
         {
-          "key": "key35",
-          "value": "177"
+          key: "key35",
+          value: "177"
         },
         {
-          "key": "key36",
-          "value": "40"
+          key: "key36",
+          value: "40"
         },
         {
-          "key": "key37",
-          "value": "66"
+          key: "key37",
+          value: "66"
         },
         {
-          "key": "key41",
-          "value": "195"
+          key: "key41",
+          value: "195"
         },
         {
-          "key": "key42",
-          "value": "274"
+          key: "key42",
+          value: "274"
         }
       ]
     }
