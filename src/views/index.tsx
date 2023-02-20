@@ -4,6 +4,7 @@ import CompareTable from '../components/CompareTable';
 import { IComparisonType, Status } from '../utils/types';
 
 import fakeData from '../hooks/data';
+import { Pagination } from '@material-ui/lab';
 
 const initialStatus: Status = {
   page: 1,
@@ -34,6 +35,10 @@ const Comparison: FC = () => {
     columnSequence: []
   })
 
+  const handleChangePage = (e: any, page: number) => {
+    setStatus({ ...status, page })
+  };
+
   useEffect(() => {
     const initializeData = async () => {
       try {
@@ -42,7 +47,7 @@ const Comparison: FC = () => {
         setInitialData(fakeData)
         setStatus((prevState) => ({
           ...prevState,
-          page: Math.ceil(fakeData.columnData.length / status.perPage)
+          totalPage: Math.ceil(fakeData.columnData.length / status.perPage),
         }))
       }
       catch (e) {
@@ -64,11 +69,22 @@ const Comparison: FC = () => {
     }
   }, [initialData, status])
 
-  return (
+  return (<>
+    <Pagination
+      page={status.page}
+      count={status.totalPage}
+      defaultPage={1}
+      color="primary"
+      variant="text"
+      shape="rounded"
+      onChange={handleChangePage}
+      style={{ margin: '1rem auto', justifyContent: 'center', display: 'flex' }}
+    />
     <CompareTable
       status={status}
       source={source}
     />
+  </>
   );
 };
 
