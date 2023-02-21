@@ -17,6 +17,7 @@ export interface IActionType {
 interface Props<T> {
   data: T[];
   columns: IColumnType<T>[];
+  compressed: boolean[];
   actions?: IActionType;
 }
 
@@ -27,12 +28,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export function ReactTable<T>({ data, columns, actions }: Props<T>): JSX.Element {
+export function ReactTable<T>({ data, columns, actions, compressed }: Props<T>): JSX.Element {
   const classes = useStyles();
   return (
     <table className={classes.root}>
       <thead>
-        <ReactTableHeader columns={columns} actions={actions} />
+        <ReactTableHeader columns={columns} actions={actions} compressed={compressed} />
       </thead>
       <tbody>
         <ReactTableRow data={data} columns={columns} />

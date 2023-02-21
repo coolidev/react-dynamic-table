@@ -5,6 +5,7 @@ export interface Status {
   isSize: boolean;
   width: string;
   disabled: boolean;
+  isCompressedView: boolean;
 }
 
 export interface IData {
@@ -42,6 +43,7 @@ export interface ICellType<T> {
   input?: string;
   output?: string;
   isGroup?: boolean;
+  isCompressed?: boolean;
   rowBreakdownOptions?: IRowBreakdownOption<IData>[];
   render?: (cell: ICellType<T>, item: T) => void;
 }

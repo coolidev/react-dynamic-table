@@ -5,6 +5,7 @@ import { IComparisonType, Status } from '../utils/types';
 
 import fakeData from '../hooks/data';
 import { Pagination } from '@material-ui/lab';
+import { FormControlLabel, Switch } from '@material-ui/core';
 
 const initialStatus: Status = {
   page: 1,
@@ -13,6 +14,7 @@ const initialStatus: Status = {
   isSize: true,
   width: '150px',
   disabled: false,
+  isCompressedView: false
 };
 
 const Comparison: FC = () => {
@@ -27,6 +29,7 @@ const Comparison: FC = () => {
   const [status, setStatus] = useState(initialStatus);
   const [sortString, setSortString] = useState<string>('')
   const [columnSequence, setColumnSequence] = useState<string[]>([])
+  const [isCompressedView, setIsCompressedView] = useState<boolean>(false)
 
   const [initialData, setInitialData] = useState<IComparisonType>({
     tableStructure: {
@@ -100,6 +103,17 @@ const Comparison: FC = () => {
     handleColumnSequence();
   }, [sortString])
 
+  useEffect(() => {
+    const handleViewStyle = () => {
+      setStatus((prevState) => ({
+        ...prevState,
+        isCompressedView
+      }))
+    }
+  
+    handleViewStyle() 
+  }, [isCompressedView])
+
   return (<>
     <Pagination
       page={status.page}
@@ -111,6 +125,7 @@ const Comparison: FC = () => {
       onChange={handleChangePage}
       style={{ margin: '1rem auto', justifyContent: 'center', display: 'flex' }}
     />
+    <FormControlLabel control={<Switch color="primary" value={isCompressedView} onChange={(e, v) => {setIsCompressedView(v)}} />} label="Compress View" />
     <CompareTable
       status={status}
       source={source}

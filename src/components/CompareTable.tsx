@@ -70,6 +70,7 @@ const CompareTable: FC<CompareTableProps> = ({
   const classes = useStyles();
 
   const [columns, setColumns] = useState<IColumnType<IData>[]>([])
+  const [compressed, setCompressed] = useState<boolean[]>([])
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
   const [cellData, setCellData] = useState<IData[]>([])
@@ -148,10 +149,29 @@ const CompareTable: FC<CompareTableProps> = ({
         // combine row names to data
         columnData.unshift(comparison)
 
+        if (status.isCompressedView) {
+          const inputList = columnData.sort((a, b) => {
+            const sortAsColumn = [...columns].map((v) => v.key)
+            if (a[0] === undefined || b[0] === undefined) return 0
+            return sortAsColumn.indexOf(a[0].key) - sortAsColumn.indexOf(b[0].key)
+          }).map((column, idx) => {
+            return column.map((data, idx) => {
+              return data.input
+            }).toString()
+          })
+          const checkCompressed = inputList.map((str, idx) => idx > 0 && str === inputList[idx - 1])
+          setCompressed(checkCompressed)
+        } else {
+          setCompressed([])
+        }
+
         const processed = columnData[0].map((rowKey, idx) => {
           return columnData.map(row => {
             return row.filter((cell) => cell.key === rowKey.key)[0]
           })
+        }).map((row, idx) => {
+          // may have an issue here
+          return row.map((col, index) => ({ ...col, isCompressed: compressed[index] }))
         }).map((row) => {
           let grouped = {}
           row.filter(cell => cell !== undefined).map((cell) => {
@@ -160,12 +180,10 @@ const CompareTable: FC<CompareTableProps> = ({
               [cell.colKey]: cell.value,
               [`input_${cell.colKey}`]: cell.input,
               [`output_${cell.colKey}`]: cell.output,
+              [`isCompressed_${cell.colKey}`]: cell.isCompressed,
               isGroup: cell.isGroup
             }
-            return {
-              [cell.colKey]: cell.value,
-              [`input_${cell.colKey}`]: cell.input,
-              [`output_${cell.colKey}`]: cell.output }
+            return true
           })
           grouped = {
             ...grouped,
@@ -174,16 +192,12 @@ const CompareTable: FC<CompareTableProps> = ({
           return grouped
         })
         setCellData(processed)
-      } else {
-        // Todo: need to manage table data
-        // const columnData = [...data]
-        // setCellData(columnData)
       }
     }
     if (source !== undefined) {
       handleData()
     }
-  }, [source, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded])
+  }, [source, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded, status, compressed])
 
   useEffect(() => {
     if (cellData.length) {
@@ -193,7 +207,7 @@ const CompareTable: FC<CompareTableProps> = ({
 
   return (
     <div data-rank-table='true' className={classes.root}>
-      <ReactTable data={cellData} columns={columns} actions={{ deleteColumn: deleteColumn}} />
+      <ReactTable data={cellData} columns={columns} compressed={compressed} actions={{ deleteColumn: deleteColumn}} />
     </div>
   );
 };

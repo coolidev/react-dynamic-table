@@ -9,3 +9,14 @@
 .dx-state-invisible {
   display: none;
 }
+
+td, th {
+  border: 1px solid black;
+}
+/* th:empty, */
+/* td:empty {
+  visibility:hidden;
+}
+th:blank, td:blank {
+  visibility:hidden;
+} */

@@ -25,7 +25,15 @@ interface IContextItem {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
+  rowField: {
+    backgroundColor: 'rgb(207,213,234)'
+  },
+  inputCell: {
+    color: 'white',
+    backgroundColor: 'rgb(68,114,196)',
+  },
+  outputCell: {
+    backgroundColor: 'rgb(255,255,0)'
   }
 }));
 
@@ -37,6 +45,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   const value = lodash.get(item, column.key);
   const input = lodash.get<typeof item, string>(item, `input_${column.key}`)
   const output = lodash.get<typeof item, string>(item, `output_${column.key}`)
+  const isCompressed = lodash.get<typeof item, string>(item, `isCompressed_${column.key}`)
   
   useEffect(() => {
     if (column.key === 'comparison') {
@@ -74,8 +83,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
       {isRowHeader ? (
         <td
           id={`context-menu-${index}`}
-          colSpan={2}
-          className={classes.root}
+          className={classes.rowField}
           style={{
             fontSize: lodash.get(item, 'isGroup') === true ? '1.25rem' : '0.875rem',
           }}>
@@ -88,16 +96,15 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
                 target={`#context-menu-${index}`}
                 itemRender={renderItem}
                 onItemClick={handleSelectOption}
-                style={{ position: 'absolute' }}
               />
             </>}
         </td>) : (<>
-            <td>
+            {!isCompressed && input ? <td className={classes.inputCell}>
               {input}
-            </td>
-            <td>
+            </td> : <></>}
+            {output && <td className={classes.outputCell}>
               {output}
-            </td>
+            </td>}
           </>
         )}
     </>

@@ -258,102 +258,102 @@ const fakeData: IComparisonType = {
       data: [
         {
           key: "key11",
-          input: "input-82",
+          input: "input 7",
           output: "output-82"
         },
         {
           key: "key12",
-          input: "input-286",
+          input: "input-6",
           output: "output-286"
         },
         {
           key: "key21",
-          input: "input-6",
+          input: "input-54",
           output: "output-6"
         },
         {
           key: "key22",
-          input: "input-210",
+          input: "input-23",
           output: "output-210"
         },
         {
           key: "key23",
-          input: "input-166",
+          input: "input-37",
           output: "output-166"
         },
         {
           key: "key24",
-          input: "input-117",
+          input: "input-25",
           output: "output-117"
         },
         {
           key: "key25",
-          input: "input-174",
+          input: "input-54",
           output: "output-174"
         },
         {
           key: "key26",
-          input: "input-124",
+          input: "input-17",
           output: "output-124"
         },
         {
           key: "key27",
-          input: "input-48",
+          input: "input-51",
           output: "output-48"
         },
         {
           key: "key28",
-          input: "input-275",
+          input: "input-57",
           output: "output-275"
         },
         {
           key: "key29",
-          input: "input-139",
+          input: "input-62",
           output: "output-139"
         },
         {
           key: "key31",
-          input: "input-223",
+          input: "input-82",
           output: "output-223"
         },
         {
           key: "key32",
-          input: "input-80",
+          input: "input-256",
           output: "output-80"
         },
         {
           key: "key33",
-          input: "input-83",
+          input: "input-113",
           output: "output-83"
         },
         {
           key: "key34",
-          input: "input-30",
+          input: "input-14",
           output: "output-30"
         },
         {
           key: "key35",
-          input: "input-253",
+          input: "input-27",
           output: "output-253"
         },
         {
           key: "key36",
-          input: "input-21",
+          input: "input-235",
           output: "output-21"
         },
         {
           key: "key37",
-          input: "input-278",
+          input: "input-174",
           output: "output-278"
         },
         {
           key: "key41",
-          input: "input-161",
+          input: "input-41",
           output: "output-161"
         },
         {
           key: "key42",
-          input: "input-201",
+          input: "input-20",
           output: "output-201"
         }
       ]
@@ -576,102 +576,102 @@ const fakeData: IComparisonType = {
       data: [
         {
           key: "key11",
-          input: "input-125",
+          input: "input-87",
           output: "output-125"
         },
         {
           key: "key12",
-          input: "input-212",
+          input: "input-193",
           output: "output-212"
         },
         {
           key: "key21",
-          input: "input-163",
+          input: "input-189",
           output: "output-163"
         },
         {
           key: "key22",
-          input: "input-209",
+          input: "input-26",
           output: "output-209"
         },
         {
           key: "key23",
-          input: "input-55",
+          input: "input-41",
           output: "output-55"
         },
         {
           key: "key24",
-          input: "input-198",
+          input: "input-13",
           output: "output-198"
         },
         {
           key: "key25",
-          input: "input-144",
+          input: "input-245",
           output: "output-144"
         },
         {
           key: "key26",
-          input: "input-217",
+          input: "input-33",
           output: "output-217"
         },
         {
           key: "key27",
-          input: "input-44",
+          input: "input-97",
           output: "output-44"
         },
         {
           key: "key28",
-          input: "input-101",
+          input: "input-110",
           output: "output-101"
         },
         {
           key: "key29",
-          input: "input-135",
+          input: "input-176",
           output: "output-135"
         },
         {
           key: "key31",
-          input: "input-68",
+          input: "input-256",
           output: "output-68"
         },
         {
           key: "key32",
-          input: "input-13",
+          input: "input-133",
           output: "output-13"
         },
         {
           key: "key33",
-          input: "input-123",
+          input: "input-100",
           output: "output-123"
         },
         {
           key: "key34",
-          input: "input-259",
+          input: "input-212",
           output: "output-259"
         },
         {
           key: "key35",
-          input: "input-97",
+          input: "input-121",
           output: "output-97"
         },
         {
           key: "key36",
-          input: "input-242",
+          input: "input-135",
           output: "output-242"
         },
         {
           key: "key37",
-          input: "input-215",
+          input: "input-9",
           output: "output-215"
         },
         {
           key: "key41",
-          input: "input-180",
+          input: "input-232",
           output: "output-180"
         },
         {
           key: "key42",
-          input: "input-85",
+          input: "input-269",
           output: "output-85"
         }
       ]
