@@ -36,9 +36,10 @@ export function ReactTableHeader<T>({ columns, actions, compressed }: Props<T>):
   return (
     <tr className={classes.root}>
       {columns.map((column, columnIndex) => {
+        const columnWidth = column.width === undefined ? 'auto' : (isCompressedView && columnIndex > 0 ? column.width : column.width * 2);
         return (<React.Fragment key={`table-head-cell-${columnIndex}`}>
-          {isCompressedView && !compressed[columnIndex] && columnIndex > 0 ? (<th></th>) : (<></>)}
-          <th style={{ width: column.width }} colSpan={isCompressedView || columnIndex === 0 ? 1 : 2}>
+          {isCompressedView && !compressed[columnIndex] && columnIndex > 0 ? (<th style={{ width: columnWidth }}></th>) : (<></>)}
+          <th style={{ width: columnWidth }} colSpan={isCompressedView || columnIndex === 0 ? 1 : 2}>
             {column.name}
             {column.removeEnabled && (<DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} />)}
           </th>

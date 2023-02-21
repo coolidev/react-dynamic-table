@@ -149,6 +149,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 1",
       key: "project1",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -255,6 +256,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 2",
       key: "project2",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -361,6 +363,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 3",
       key: "project3",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -467,6 +470,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 4",
       key: "project4",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -573,6 +577,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 5",
       key: "project5",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -679,6 +684,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 6",
       key: "project6",
+      width: 150,
       data: [
         {
           key: "key11",
@@ -785,6 +791,7 @@ const fakeData: IComparisonType = {
     {
       name: "Project 7",
       key: "project7",
+      width: 150,
       data: [
         {
           key: "key11",

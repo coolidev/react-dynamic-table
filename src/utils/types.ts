@@ -65,7 +65,8 @@ export interface ITableStructure {
 export interface IColumnData {
   name: string;
   key: string;
-  data: IData[]
+  data: IData[];
+  width?: number;
 }
 export interface IComparisonType {
   tableStructure: ITableStructure;
