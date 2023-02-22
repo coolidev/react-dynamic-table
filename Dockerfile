@@ -6,6 +6,6 @@ WORKDIR /app
 # Copy Files to container
 COPY . .
 # Build Front-end
-RUN npm install
+RUN yarn
 
 CMD npm run start
