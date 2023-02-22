@@ -112,11 +112,12 @@ const CompareTable: FC<CompareTableProps> = ({
       const rowData = source.tableStructure.group;
       const rows = rowData.map((group, idx) => {
         return [
-          {
-            name: group.name,
-            key: `group_${idx}`,
-            isGroup: true
-          }, ...group.items];
+          // {
+          //   name: group.name,
+          //   key: `group_${idx}`,
+          //   isGroup: true
+          // },
+          ...group.items];
       }).flat();
       setRowNames(rows);
       // For reload page with new table structure
