@@ -99,7 +99,7 @@ const CompareTable: FC<CompareTableProps> = ({
       // Columns
       const columnData = source.columnData
       const columnsBuffer = [
-        { key: 'comparison', name: "", width: 150 },
+        { key: 'comparison', name: "Parameters", width: 150 },
         ...columnData.map((column) => {
           return { key: column.key, name: column.name, width: column.width, removeEnabled: true }
         })
