@@ -44,6 +44,13 @@ const Comparison: FC = () => {
     setStatus({ ...status, page })
   };
 
+  const deleteColumn = (columnKey: string) => {
+    const sourceBuf = {...initialData};
+    const columnDataBuf = (sourceBuf.columnData.filter((column) => column.key !== columnKey))
+    sourceBuf.columnData = columnDataBuf
+    setInitialData(sourceBuf);
+  }
+
   const sortColumn = () => {
     const tData = {...initialData}
     const columnsBuffer = [...initialData.columnData];
@@ -129,6 +136,7 @@ const Comparison: FC = () => {
     <CompareTable
       status={status}
       source={source}
+      action={{deleteColumn: deleteColumn}}
     />
     <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
     <button onClick={sortColumn}>Sort</button>

@@ -5,10 +5,12 @@ import {
 } from '@material-ui/core';
 import type { ICellType, IColumnType, IComparisonType, IData, IRowBreakdownOption, IRowType, Status } from '../utils/types';
 import { ReactTable } from './ReactTable/ReactTable';
+import type { IActionType } from './ReactTable/ReactTable'
 
 interface CompareTableProps {
   status: Status;
   source: IComparisonType;
+  action: IActionType;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -66,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 const CompareTable: FC<CompareTableProps> = ({
   status,
   source,
+  action
 }) => {
   const classes = useStyles();
 
@@ -76,16 +79,16 @@ const CompareTable: FC<CompareTableProps> = ({
   const [cellData, setCellData] = useState<IData[]>([])
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
   
-  const deleteColumn = (columnKey: string) => {
-    const columnsBuffer = columns;
-    setColumns(columnsBuffer.filter((column) => column.key !== columnKey))
-    const dataBuffer = cellData;
-    const newData = dataBuffer.map((row) => {
-      delete row[columnKey];
-      return row;
-    })
-    setCellData(newData);
-  }
+  // const deleteColumn = (columnKey: string) => {
+  //   const columnsBuffer = columns;
+  //   setColumns(columnsBuffer.filter((column) => column.key !== columnKey))
+  //   const dataBuffer = cellData;
+  //   const newData = dataBuffer.map((row) => {
+  //     delete row[columnKey];
+  //     return row;
+  //   })
+  //   setCellData(newData);
+  // }
 
   useEffect(() => {
     setPageLoaded(false);
@@ -116,6 +119,8 @@ const CompareTable: FC<CompareTableProps> = ({
           }, ...group.items];
       }).flat();
       setRowNames(rows);
+      // For reload page with new table structure
+      setPageLoaded(false);
     }
   }, [source])
 
@@ -207,7 +212,7 @@ const CompareTable: FC<CompareTableProps> = ({
 
   return (
     <div data-rank-table='true' className={classes.root}>
-      <ReactTable data={cellData} columns={columns} compressed={compressed} actions={{ deleteColumn: deleteColumn}} />
+      <ReactTable data={cellData} columns={columns} compressed={compressed} actions={{ deleteColumn: action.deleteColumn }} />
     </div>
   );
 };
