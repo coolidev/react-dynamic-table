@@ -87,6 +87,10 @@ const Comparison: FC = () => {
 
   useEffect(() => {
     if (initialData !== undefined) {
+      setStatus((prevState) => ({
+        ...prevState,
+        totalPage: Math.ceil(initialData.columnData.length / status.perPage),
+      }))
       const buffer = {
         tableStructure: initialData.tableStructure,
         columnData: initialData.columnData.filter((column, index) => index >= (status.page - 1) * status.perPage && index < status.page * status.perPage),
