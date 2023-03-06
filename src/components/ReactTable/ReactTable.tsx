@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Status } from "../../utils/types";
 import { ReactTableHeader } from "./ReactTableHeader";
 import { ReactTableRow } from "./ReactTableRow";
 
@@ -18,6 +19,7 @@ interface Props<T> {
   data: T[];
   columns: IColumnType<T>[];
   compressed: boolean[];
+  status: Status;
   actions?: IActionType;
 }
 
@@ -28,12 +30,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export function ReactTable<T>({ data, columns, actions, compressed }: Props<T>): JSX.Element {
+export function ReactTable<T>({ data, columns, actions, compressed, status }: Props<T>): JSX.Element {
   const classes = useStyles();
   return (
     <table className={classes.root}>
       <thead>
-        <ReactTableHeader columns={columns} actions={actions} compressed={compressed} />
+        <ReactTableHeader columns={columns} actions={actions} compressed={compressed} status={status} />
       </thead>
       <tbody>
         <ReactTableRow data={data} columns={columns} />

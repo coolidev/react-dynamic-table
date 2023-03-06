@@ -5,7 +5,7 @@ const fakeData: IComparisonType = {
     group: [
       {
         info: null,
-        name: "Parameters",
+        name: "Mission",
         items: [
           {
             name: "Altitude (km)",
@@ -16,6 +16,31 @@ const fakeData: IComparisonType = {
             name: "Inclination (deg)",
             key: "key12",
             rowBreakdownOptions: ["option1","option2"]
+          },
+          {
+            name: "Eccentricity",
+            key: "key13",
+            rowBreakdownOptions: ["option1","option2"]
+          },
+          {
+            name: "Frequency Band",
+            key: "key14",
+            rowBreakdownOptions: ["option1","option2"]
+          },
+          {
+            name: "Modulation",
+            key: "key15",
+            rowBreakdownOptions: ["option1","option2"]
+          },
+          {
+            name: "Coding",
+            key: "key16",
+            rowBreakdownOptions: ["option1","option2"]
+          },
+          {
+            name: "Standards Compliance",
+            key: "key17",
+            rowBreakdownOptions: ["option1","option2"]
           }
         ]
       },
@@ -25,31 +50,36 @@ const fakeData: IComparisonType = {
         items: [
           {
             name: "RF Coverage (%)",
-            key: "key21",
+            key: "key20",
             rowBreakdownOptions: ["option2"]
           },
           {
             name: "Mean Number of RF Contacts Per Orbit",
-            key: "key22",
+            key: "key21",
             rowBreakdownOptions: []
           },
           {
-            name: "Mean RF Contact Duration (seconds)",
+            name: "Mean RF Contact Duration (min.)",
+            key: "key22",
+            rowBreakdownOptions: ["option1"]
+          },
+          {
+            name: "Average Contact Duration (min.)",
             key: "key23",
             rowBreakdownOptions: ["option1"]
           },
           {
-            name: "Average Gap (minutes)",
+            name: "Average Gap (min.)",
             key: "key24",
             rowBreakdownOptions: ["option1","option2"]
           },
           {
-            name: "Max RF Coverage Gap (minutes)",
+            name: "Max RF Coverage Gap (min.)",
             key: "key25",
             rowBreakdownOptions: ["option2"]
           },
           {
-            name: "Mean Response Time (seconds)",
+            name: "Mean Response Time (min.)",
             key: "key26",
             rowBreakdownOptions: []
           },
@@ -59,7 +89,7 @@ const fakeData: IComparisonType = {
             rowBreakdownOptions: ["option1"]
           },
           {
-            name: "Data Rate (kbps)",
+            name: "Data Rate (Mbps)",
             key: "key28",
             rowBreakdownOptions: ["option1","option2"]
           },
@@ -160,6 +190,36 @@ const fakeData: IComparisonType = {
           key: "key12",
           input: "input-6",
           output: "output-6"
+        },
+        {
+          key: "key13",
+          input: "input-185",
+          output: "output-102"
+        },
+        {
+          key: "key14",
+          input: "input-207",
+          output: "output-36"
+        },
+        {
+          key: "key15",
+          input: "input-233",
+          output: "output-121"
+        },
+        {
+          key: "key16",
+          input: "input-200",
+          output: "output-32"
+        },
+        {
+          key: "key17",
+          input: "input-172",
+          output: "output-233"
+        },
+        {
+          key: "key20",
+          input: "input-260",
+          output: "output-180"
         },
         {
           key: "key21",
@@ -269,6 +329,36 @@ const fakeData: IComparisonType = {
           output: "output-286"
         },
         {
+          key: "key13",
+          input: "input-185",
+          output: "output-102"
+        },
+        {
+          key: "key14",
+          input: "input-207",
+          output: "output-36"
+        },
+        {
+          key: "key15",
+          input: "input-233",
+          output: "output-121"
+        },
+        {
+          key: "key16",
+          input: "input-200",
+          output: "output-32"
+        },
+        {
+          key: "key17",
+          input: "input-172",
+          output: "output-233"
+        },
+        {
+          key: "key20",
+          input: "input-260",
+          output: "output-180"
+        },
+        {
           key: "key21",
           input: "input-54",
           output: "output-6"
@@ -374,6 +464,36 @@ const fakeData: IComparisonType = {
           key: "key12",
           input: "input-241",
           output: "output-241"
+        },
+        {
+          key: "key13",
+          input: "input-163",
+          output: "output-187"
+        },
+        {
+          key: "key14",
+          input: "input-7",
+          output: "output-251"
+        },
+        {
+          key: "key15",
+          input: "input-97",
+          output: "output-190"
+        },
+        {
+          key: "key16",
+          input: "input-47",
+          output: "output-211"
+        },
+        {
+          key: "key17",
+          input: "input-16",
+          output: "output-253"
+        },
+        {
+          key: "key20",
+          input: "input-273",
+          output: "output-164"
         },
         {
           key: "key21",
@@ -483,6 +603,36 @@ const fakeData: IComparisonType = {
           output: "output-193"
         },
         {
+          key: "key13",
+          input: "input-163",
+          output: "output-187"
+        },
+        {
+          key: "key14",
+          input: "input-7",
+          output: "output-251"
+        },
+        {
+          key: "key15",
+          input: "input-97",
+          output: "output-190"
+        },
+        {
+          key: "key16",
+          input: "input-47",
+          output: "output-211"
+        },
+        {
+          key: "key17",
+          input: "input-16",
+          output: "output-253"
+        },
+        {
+          key: "key20",
+          input: "input-273",
+          output: "output-164"
+        },
+        {
           key: "key21",
           input: "input-189",
           output: "output-189"
@@ -590,6 +740,36 @@ const fakeData: IComparisonType = {
           output: "output-212"
         },
         {
+          key: "key13",
+          input: "input-163",
+          output: "output-187"
+        },
+        {
+          key: "key14",
+          input: "input-7",
+          output: "output-251"
+        },
+        {
+          key: "key15",
+          input: "input-97",
+          output: "output-190"
+        },
+        {
+          key: "key16",
+          input: "input-47",
+          output: "output-211"
+        },
+        {
+          key: "key17",
+          input: "input-16",
+          output: "output-253"
+        },
+        {
+          key: "key20",
+          input: "input-273",
+          output: "output-164"
+        },
+        {
           key: "key21",
           input: "input-189",
           output: "output-163"
@@ -695,6 +875,35 @@ const fakeData: IComparisonType = {
           key: "key12",
           input: "input-25",
           output: "output-25"
+        },{
+          key: "key13",
+          input: "input-133",
+          output: "output-168"
+        },
+        {
+          key: "key14",
+          input: "input-218",
+          output: "output-100"
+        },
+        {
+          key: "key15",
+          input: "input-162",
+          output: "output-206"
+        },
+        {
+          key: "key16",
+          input: "input-206",
+          output: "output-83"
+        },
+        {
+          key: "key17",
+          input: "input-200",
+          output: "output-142"
+        },
+        {
+          key: "key20",
+          input: "input-279",
+          output: "output-240"
         },
         {
           key: "key21",
@@ -802,6 +1011,36 @@ const fakeData: IComparisonType = {
           key: "key12",
           input: "input-8",
           output: "output-8"
+        },
+        {
+          key: "key13",
+          input: "input-208",
+          output: "output-223"
+        },
+        {
+          key: "key14",
+          input: "input-178",
+          output: "output-243"
+        },
+        {
+          key: "key15",
+          input: "input-13",
+          output: "output-122"
+        },
+        {
+          key: "key16",
+          input: "input-59",
+          output: "output-178"
+        },
+        {
+          key: "key17",
+          input: "input-143",
+          output: "output-218"
+        },
+        {
+          key: "key20",
+          input: "input-126",
+          output: "output-131"
         },
         {
           key: "key21",

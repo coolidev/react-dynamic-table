@@ -30,6 +30,7 @@ const Comparison: FC = () => {
   const [sortString, setSortString] = useState<string>('')
   const [columnSequence, setColumnSequence] = useState<string[]>([])
   const [isCompressedView, setIsCompressedView] = useState<boolean>(false)
+  const [pageLoaded, setPageLoaded] = useState<boolean>(false)
 
   const [initialData, setInitialData] = useState<IComparisonType>({
     tableStructure: {
@@ -49,6 +50,7 @@ const Comparison: FC = () => {
     const columnDataBuf = (sourceBuf.columnData.filter((column) => column.key !== columnKey))
     sourceBuf.columnData = columnDataBuf
     setInitialData(sourceBuf);
+    setStatus({...status})
   }
 
   const sortColumn = () => {
@@ -61,6 +63,7 @@ const Comparison: FC = () => {
     })
     tData.columnData = sortedColumns
     setInitialData(tData)
+    setStatus({...status})
   }
 
   useEffect(() => {
@@ -86,19 +89,32 @@ const Comparison: FC = () => {
   }, [])
 
   useEffect(() => {
-    if (initialData !== undefined) {
+    setPageLoaded(false);
+  }, [status])
+
+  useEffect(() => {
+    if (!pageLoaded && initialData !== undefined) {
       setStatus((prevState) => ({
         ...prevState,
         totalPage: Math.ceil(initialData.columnData.length / status.perPage),
       }))
       const buffer = {
         tableStructure: initialData.tableStructure,
-        columnData: initialData.columnData.filter((column, index) => index >= (status.page - 1) * status.perPage && index < status.page * status.perPage),
+        columnData: initialData.columnData,
+        // columnData: initialData.columnData.filter((column, index) => index >= (status.page - 1) * status.perPage && index < status.page * status.perPage),
         columnSequence: initialData.columnSequence
       }
       setSource(buffer)
+      setPageLoaded(false);
     }
   }, [initialData, status])
+  
+  useEffect(() => {
+    if (source.columnData.length) {
+      setPageLoaded(true)
+    }
+  }, [source])
+
 
   useEffect(() => {
     const handleColumnSequence = () => {

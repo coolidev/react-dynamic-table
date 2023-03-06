@@ -83,9 +83,11 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
       {isRowHeader ? (
         <td
           id={`context-menu-${index}`}
-          className={classes.rowField}
+          // className={classes.rowField}
+          colSpan={lodash.get(item, `isGroup_${column.key}`) === true ? 11 : 0}
           style={{
-            fontSize: lodash.get(item, 'isGroup') === true ? '1.25rem' : '0.875rem',
+            fontSize: lodash.get(item, `isGroup_${column.key}`) === true ? '1.25rem' : '0.875rem',
+            backgroundColor: lodash.get(item, `isGroup_${column.key}`) === true ? 'white' : 'rgb(207,213,234)',
           }}>
             {column.render ? column.render(column, item) : value}
             {contextItems.length > 0 && <>

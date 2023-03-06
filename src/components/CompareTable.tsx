@@ -74,30 +74,29 @@ const CompareTable: FC<CompareTableProps> = ({
 
   const [columns, setColumns] = useState<IColumnType<IData>[]>([])
   const [compressed, setCompressed] = useState<boolean[]>([])
+  const [compInPage, setCompInPage] = useState<boolean[]>([])
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
   const [cellData, setCellData] = useState<IData[]>([])
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
-  
-  // const deleteColumn = (columnKey: string) => {
-  //   const columnsBuffer = columns;
-  //   setColumns(columnsBuffer.filter((column) => column.key !== columnKey))
-  //   const dataBuffer = cellData;
-  //   const newData = dataBuffer.map((row) => {
-  //     delete row[columnKey];
-  //     return row;
-  //   })
-  //   setCellData(newData);
-  // }
 
   useEffect(() => {
     setPageLoaded(false);
-  }, [status])
-
-  useEffect(() => {
     if (source !== undefined) {
       // Columns
-      const columnData = source.columnData
+      let sum = 0
+      const checkInPage = compressed.filter((_, index) => index > 0).map((value) => {
+        sum = sum + (value === true ? 1 : 2);
+        if (sum % (status.perPage * 2) === 1) {
+          sum = sum + 1;
+        }
+        return sum
+      })
+      const columnData = source.columnData.filter((_, index) => {
+        return status.isCompressedView ?
+          (checkInPage[index] <= status.perPage * 2 * status.page && checkInPage[index] > status.perPage * 2 * (status.page - 1)) :
+          (index >= (status.page - 1) * status.perPage && index < status.page * status.perPage)
+      })
       const columnsBuffer = [
         { key: 'comparison', name: "Parameters", width: 150 },
         ...columnData.map((column) => {
@@ -112,18 +111,18 @@ const CompareTable: FC<CompareTableProps> = ({
       const rowData = source.tableStructure.group;
       const rows = rowData.map((group, idx) => {
         return [
-          // {
-          //   name: group.name,
-          //   key: `group_${idx}`,
-          //   isGroup: true
-          // },
+          {
+            name: group.name,
+            key: `group_${idx}`,
+            isGroup: true
+          },
           ...group.items];
       }).flat();
       setRowNames(rows);
       // For reload page with new table structure
       setPageLoaded(false);
     }
-  }, [source])
+  }, [source, status, compressed])
 
   useEffect(() => {
     const handleData = () => {
@@ -146,7 +145,7 @@ const CompareTable: FC<CompareTableProps> = ({
             return {
               key: row.key,
               colKey: column.key,
-              value: row.value,
+              // value: row.value,
               input: row.input,
               output: row.output
             }
@@ -167,17 +166,35 @@ const CompareTable: FC<CompareTableProps> = ({
           })
           const checkCompressed = inputList.map((str, idx) => idx > 0 && str === inputList[idx - 1])
           setCompressed(checkCompressed)
+
+          setCompInPage(checkCompressed.filter((_, index) => {
+            return (index === 0 || (index >= (status.page - 1) * status.perPage + 1 && index < status.page * status.perPage + 1))
+          }))
         } else {
           setCompressed([])
+          setCompInPage([])
         }
 
+        let sum = 0
+        const checkInPage = compressed.filter((_, index) => index > 0).map((value) => {
+          sum = sum + (value === true ? 1 : 2);
+          if (sum % (status.perPage * 2) === 1) {
+            sum = sum + 1;
+          }
+          return sum
+        })
+
         const processed = columnData[0].map((rowKey, idx) => {
-          return columnData.map(row => {
+          return columnData.filter((_, index) => {
+            return status.isCompressedView ?
+              (index === 0 || (checkInPage[index - 1] <= status.perPage * 2 * status.page && checkInPage[index - 1] > status.perPage * 2 * (status.page - 1))) :
+              (index === 0 || (index >= (status.page - 1) * status.perPage + 1 && index < status.page * status.perPage + 1))
+          }).map(row => {
             return row.filter((cell) => cell.key === rowKey.key)[0]
           })
         }).map((row, idx) => {
           // may have an issue here
-          return row.map((col, index) => ({ ...col, isCompressed: compressed[index] }))
+          return row.map((col, index) => ({ ...col, isCompressed: compInPage[index] }))
         }).map((row) => {
           let grouped = {}
           row.filter(cell => cell !== undefined).map((cell) => {
@@ -187,7 +204,7 @@ const CompareTable: FC<CompareTableProps> = ({
               [`input_${cell.colKey}`]: cell.input,
               [`output_${cell.colKey}`]: cell.output,
               [`isCompressed_${cell.colKey}`]: cell.isCompressed,
-              isGroup: cell.isGroup
+              [`isGroup_${cell.colKey}`]: cell.isGroup
             }
             return true
           })
@@ -203,7 +220,7 @@ const CompareTable: FC<CompareTableProps> = ({
     if (source !== undefined) {
       handleData()
     }
-  }, [source, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded, status, compressed])
+  }, [source, columns, rowNames, rowBreakdownOptions, cellData, pageLoaded, status, compressed, compInPage])
 
   useEffect(() => {
     if (cellData.length) {
@@ -213,7 +230,7 @@ const CompareTable: FC<CompareTableProps> = ({
 
   return (
     <div data-rank-table='true' className={classes.root}>
-      <ReactTable data={cellData} columns={columns} compressed={compressed} actions={{ deleteColumn: action.deleteColumn }} />
+      <ReactTable data={cellData} columns={columns} compressed={compInPage} actions={{ deleteColumn: action.deleteColumn }} status={status} />
     </div>
   );
 };
