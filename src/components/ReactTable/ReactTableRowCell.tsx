@@ -77,7 +77,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
         <span>{data.text}</span>
       </div>
     );
-}
+  }
   
   return (<>
       {isRowHeader ? (
