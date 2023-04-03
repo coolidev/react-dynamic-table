@@ -1,10 +1,11 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, MenuItem, Theme } from "@material-ui/core";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { ContextMenu } from "devextreme-react";
 import lodash from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import { IColumnType } from "./ReactTable";
+import { AlertContext } from "../../providers/alert";
 
 interface Props<T> {
   index: number;
@@ -28,13 +29,27 @@ const useStyles = makeStyles((theme: Theme) => ({
   rowField: {
     backgroundColor: 'rgb(207,213,234)'
   },
-  inputCell: {
-    color: 'white',
-    backgroundColor: 'rgb(68,114,196)',
+  groupField: {
+    backgroundColor: 'rgb(220, 220, 220)',
+    fontSize: '1rem',
   },
-  outputCell: {
-    backgroundColor: 'rgb(255,255,0)'
-  }
+  normalField: {
+    backgroundColor: 'white',
+    fontSize: '0.875rem',
+  },
+  contextMenu: {
+    width: '200px !important',
+    '& ul': {
+      listStyle: 'none',
+      padding: '0',
+      '& li': {
+        borderBottom: '1px solid grey',
+      },
+      '& li:last-child': {
+        borderBottom: 'none',
+      },
+    }
+  },
 }));
 
 export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Element {
@@ -45,8 +60,11 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   const value = lodash.get(item, column.key);
   const input = lodash.get<typeof item, string>(item, `input_${column.key}`)
   const output = lodash.get<typeof item, string>(item, `output_${column.key}`)
-  const isCompressed = lodash.get<typeof item, string>(item, `isCompressed_${column.key}`)
-  
+  const isCompressed = lodash.get(item, `isCompressed_${column.key}`)
+  const isGroup = lodash.get(item, `isGroup_comparison`)
+
+  const { handleOpen, handleMessage } = useContext(AlertContext)
+
   useEffect(() => {
     if (column.key === 'comparison') {
       const rowBreakdownOptions = lodash.get<typeof item, string>(item, 'rowBreakdownOptions');
@@ -65,50 +83,73 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
 
   const handleSelectOption = (e: any) => {
     if (!e.itemData.items) {
-      const test = contextItems.filter((option) => option.key === e.itemData.key)[0]
-      const fn = new Function("return " + test.action)();
-      fn(e.itemData.key)
+      const action = contextItems.filter((option) => option.key === e.itemData.key)[0];
+      handleMessage(action.text)
+      handleOpen(true)
+      // const fn = new Function("return " + action.action)();
+      // fn(e.itemData.key)
     }
   }
 
   const renderItem = (data: IContextItem, index: number) => {
     return (
       <div key={data.key}>
-        <span>{data.text}</span>
+        <MenuItem>
+          {data.text}
+        </MenuItem>
       </div>
     );
   }
-  
+
   return (<>
-      {isRowHeader ? (
-        <td
-          id={`context-menu-${index}`}
-          // className={classes.rowField}
-          colSpan={lodash.get(item, `isGroup_${column.key}`) === true ? 11 : 0}
-          style={{
-            fontSize: lodash.get(item, `isGroup_${column.key}`) === true ? '1.25rem' : '0.875rem',
-            backgroundColor: lodash.get(item, `isGroup_${column.key}`) === true ? 'white' : 'rgb(207,213,234)',
-          }}>
-            {column.render ? column.render(column, item) : value}
-            {contextItems.length > 0 && <>
-              <ArrowDropDownIcon />
-              <ContextMenu
-                dataSource={contextItems}
-                width={200}
-                target={`#context-menu-${index}`}
-                itemRender={renderItem}
-                onItemClick={handleSelectOption}
-              />
-            </>}
-        </td>) : (<>
-            {!isCompressed && input ? <td className={classes.inputCell}>
-              {input}
-            </td> : <></>}
-            {output && <td className={classes.outputCell}>
+    {isRowHeader ? (<>
+      <td id={`context-menu-${index}`}
+        className={isGroup ? classes.groupField : classes.normalField}
+      >
+        <span>
+          {column.render ? column.render(column, item) : value}
+        </span>
+        {contextItems.length > 0 && <>
+          <ArrowDropDownIcon />
+          <ContextMenu
+            cssClass={classes.contextMenu}
+            dataSource={contextItems}
+            itemRender={renderItem}
+            target={`#context-menu-${index}`}
+            onItemClick={(e) => { handleSelectOption(e) }}
+          />
+        </>}
+      </td>
+    </>) : (<>
+      {isCompressed ?
+        (isGroup ?
+          (<>
+            <td className={`${classes.groupField} row-group text-center`}>Output</td>
+          </>) :
+          (<>
+            {output && <td className={`${classes.normalField} text-center`}>
               {output}
             </td>}
-          </>
-        )}
+          </>)) :
+        (isGroup ?
+          (<>
+            <td className={`${classes.groupField} row-group text-center`} style={{ borderRight: 'none' }}>Input</td>
+            <td className={`${classes.groupField} row-group text-center`} style={{ borderLeft: 'none' }}>Output</td>
+          </>) :
+          (<>
+            {input ? <td className={`${classes.normalField} text-center`} style={{ borderRight: 'none' }}>
+              {input}
+            </td> : <td className={`${classes.normalField} text-center`} style={{ borderRight: 'none' }}>
+              - -
+            </td>}
+            {output ? <td className={`${classes.normalField} text-center`} style={{ borderLeft: 'none' }}>
+              {output}
+            </td> : <td className={`${classes.normalField} text-center`} style={{ borderLeft: 'none' }}>
+              - -
+            </td>}
+          </>))}
     </>
+    )}
+  </>
   );
 }

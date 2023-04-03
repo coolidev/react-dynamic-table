@@ -1,26 +1,3 @@
-.App {
-  text-align: center;
+.dx-collection .dx-widget {
+  display: none !important
 }
-
-.App > table {
-  margin: 1rem auto;
-}
-
-.dx-state-invisible {
-  display: none;
-}
-
-table {
-  border-spacing: 0;
-}
-
-td, th {
-  border: 1px solid white;
-}
-/* th:empty, */
-/* td:empty {
-  visibility:hidden;
-}
-th:blank, td:blank {
-  visibility:hidden;
-} */

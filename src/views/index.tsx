@@ -4,8 +4,7 @@ import CompareTable from '../components/CompareTable';
 import { IComparisonType, Status } from '../utils/types';
 
 import fakeData from '../hooks/data';
-import { Pagination } from '@material-ui/lab';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import CompareHeader from '../components/CompareHeader';
 
 const initialStatus: Status = {
   page: 1,
@@ -41,9 +40,7 @@ const Comparison: FC = () => {
     columnSequence: []
   })
 
-  const handleChangePage = (e: any, page: number) => {
-    setStatus({ ...status, page })
-  };
+  const handleStatus = (values: Status) => setStatus(values);
 
   const deleteColumn = (columnKey: string) => {
     const sourceBuf = {...initialData};
@@ -94,27 +91,20 @@ const Comparison: FC = () => {
 
   useEffect(() => {
     if (!pageLoaded && initialData !== undefined) {
-      setStatus((prevState) => ({
-        ...prevState,
-        totalPage: Math.ceil(initialData.columnData.length / status.perPage),
-      }))
       const buffer = {
         tableStructure: initialData.tableStructure,
         columnData: initialData.columnData,
-        // columnData: initialData.columnData.filter((column, index) => index >= (status.page - 1) * status.perPage && index < status.page * status.perPage),
         columnSequence: initialData.columnSequence
       }
       setSource(buffer)
-      setPageLoaded(false);
     }
-  }, [initialData, status])
-  
+  }, [initialData, pageLoaded])
+
   useEffect(() => {
-    if (source.columnData.length) {
+    if (source?.columnData.length) {
       setPageLoaded(true)
     }
   }, [source])
-
 
   useEffect(() => {
     const handleColumnSequence = () => {
@@ -126,7 +116,7 @@ const Comparison: FC = () => {
       });
       setColumnSequence(buffer);
     }
-  
+
     handleColumnSequence();
   }, [sortString])
 
@@ -137,22 +127,17 @@ const Comparison: FC = () => {
         isCompressedView
       }))
     }
-  
+
     handleViewStyle() 
   }, [isCompressedView])
 
   return (<>
-    <Pagination
-      page={status.page}
-      count={status.totalPage}
-      defaultPage={1}
-      color="primary"
-      variant="text"
-      shape="rounded"
-      onChange={handleChangePage}
-      style={{ margin: '1rem auto', justifyContent: 'center', display: 'flex' }}
+    <CompareHeader
+      status={status}
+      onStatus={handleStatus}
+      handleDialog={() => { }}
+      disabled={false}
     />
-    <FormControlLabel control={<Switch color="primary" value={isCompressedView} onChange={(e, v) => {setIsCompressedView(v)}} />} label="Compress View" />
     <CompareTable
       status={status}
       source={source}
