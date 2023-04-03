@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.dx-overlay-wrapper {
+  background-color: rgba(0, 0, 0, 30%);
+}
+.dx-overlay-content {
+  background-color: white;
+}

@@ -4,6 +4,7 @@ import {
   Tooltip,
   IconButton,
   Badge,
+  Box,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useEffect, useState } from "react";
@@ -24,9 +25,10 @@ interface Props<T> {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: '3rem',
-    borderBottom: '1px solid red',
-    backgroundColor: 'rgb(68,114,196)',
-    color: 'white'
+    // borderBottom: '1px solid red',
+    backgroundColor: `#e34747`,
+    color: 'white',
+    fontSize: '1.1rem'
   },
   removeBtn: {
     cursor: 'pointer',
@@ -34,33 +36,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const renderPinIcon = () => {
-  return (
-    <Tooltip
-      id="compareButton"
-      title="Pin this selection for comparison"
-    >
-      <span>
-        <IconButton
-        >
-          <Badge
-            color="secondary"
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <FontAwesomeIcon
-              icon={faThumbtack as IconProp}
-              style={{ color: '#e14748' }}
-              size="sm"
-            />
-          </Badge>
-        </IconButton>
-      </span>
-    </Tooltip>)
-}
-
 export function ReactTableHeader<T>({ columns, actions, compressed, status }: Props<T>): JSX.Element {
   const classes = useStyles();
-  const [isCompressedView, setIsCompressedView] = useState(false)
+  const [isCompressedView, setIsCompressedView] = useState(false);
+
   useEffect(() => {
     if (compressed.length === 0) {
       setIsCompressedView(false)
@@ -69,6 +48,30 @@ export function ReactTableHeader<T>({ columns, actions, compressed, status }: Pr
     }
   }, [compressed])
 
+  const renderPinIcon = () => {
+    return (
+      <Tooltip
+        id="compareButton"
+        title="Pin this selection for comparison"
+      >
+        <span onClick = {() => {}}>
+          <IconButton>
+            <Badge
+              color="secondary"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <FontAwesomeIcon
+                icon={faThumbtack as IconProp}
+                style = {{color: 'white', float: 'right'}}
+                size="sm"
+              />
+            </Badge>
+          </IconButton>
+        </span>
+      </Tooltip>)
+  }
+  
+
   return (
     <React.Fragment>
       <tr className={classes.root}>
@@ -76,33 +79,30 @@ export function ReactTableHeader<T>({ columns, actions, compressed, status }: Pr
           const columnWidth = column.width === undefined ? 'auto' : (isCompressedView && columnIndex > 0 ? column.width : column.width * 2);
           return (<React.Fragment key={`table-head-cell-${columnIndex}`}>
             {columnIndex === 0 ? <>
-              <th style={{ width: columnWidth }} rowSpan={2}>{column.name}</th>
+              <th style={{ width: columnWidth }}>{column.name}</th>
             </> : isCompressedView && !compressed[columnIndex] ? <>
                 <th style={{ width: columnWidth }}></th>
-                <th style={{ width: columnWidth }}>
-                  {column.name}{column.removeEnabled && (status.page === 1 && columnIndex === 1 ? renderPinIcon() : <DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} />)}
+                <th style={{ width: columnWidth, textAlign: 'center' }}>
+                  <Box flex={true} textAlign={'center'} justifyContent={'center'} alignItems={'center'}>
+                    {column.name}
+                    {column.removeEnabled && (status.page === 1 && columnIndex === 1 ?
+                      renderPinIcon() :
+                      <DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} style = {{color: 'white'}}/>)}
+                  </Box>
                 </th>
               </> : <>
-                <th colSpan={isCompressedView ? 1 : 2} style={{ width: columnWidth }}>
-                  {column.name}{column.removeEnabled && (status.page === 1 && columnIndex === 1 ? renderPinIcon() : <DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} />)}
+                <th colSpan={isCompressedView ? 1 : 2} style={{ width: columnWidth, textAlign: 'center' }}>
+                  <Box flex={true} textAlign={'center'} justifyContent={'center'} alignItems={'center'}>
+                    {column.name}
+                    {column.removeEnabled && (status.page === 1 && columnIndex === 1 ?
+                      renderPinIcon() :
+                      <DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} style = {{color: 'white'}}/>)}
+                  </Box>
                 </th>
               </>}
-            {/* {isCompressedView && !compressed[columnIndex] && columnIndex > 0 ? (<th style={{ width: columnWidth }}></th>) : (<></>)}
-            <th style={{ width: columnWidth }} colSpan={isCompressedView || columnIndex === 0 ? 1 : 2}>
-              {column.name}
-              {column.removeEnabled && (<DeleteIcon onClick={() => {actions?.deleteColumn(column.key)}} className={classes.removeBtn} />)}
-            </th> */}
           </React.Fragment>)
         })}
-      </tr>
-      <tr className={classes.root}>
-        {columns.map((column, columnIndex) => {
-          return (<React.Fragment key={`table-subhead-cell-${columnIndex}`}>
-            {columnIndex === 0 ? <></> : !compressed[columnIndex] ? <><th>Input</th><th>Output</th></> : <><th>Output</th></>}
-            {/* {!compressed[columnIndex] && columnIndex > 0 ? (<th>Input</th>) : (<></>)}
-            {columnIndex > 0 ? (<th>Output</th>) : (<th></th>)} */}
-          </React.Fragment>)
-        })}
+        <><th colSpan={10 - compressed.map((value) => isCompressedView && !value ? 2 : 1).reduce((partialSum, a) => partialSum + a, 0)}></th></>
       </tr>
     </React.Fragment>
   );
