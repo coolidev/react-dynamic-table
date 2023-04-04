@@ -272,8 +272,7 @@ const CompareTable: FC<CompareTableProps> = ({
 
   const handleSelectOption = (e: any) => {
     if (!e.itemData.items) {
-      // const action = contextItems.filter((option) => option.key === e.itemData.key)[0];
-      handleMessage("Here")
+      handleMessage(e.itemData.text)
       handleOpen(true)
     }
   }
@@ -287,6 +286,9 @@ const CompareTable: FC<CompareTableProps> = ({
   }
 
   const ComparisonCell = (cellData: any) => {
+    const rowBreakdownOptions = cellData.data.rowBreakdownOptions ? cellData.data.rowBreakdownOptions : []
+    const contextData = rowBreakdownOptions.map((option: any) => ({ key: option.key, text: option.name }))
+
     return (
       <Grid id={`context-menu-${cellData.rowIndex}`} className={cellData.data.isGroup_comparison ? classes.groupField : classes.normalField}>
         <Box style={{ paddingLeft: '0.5rem' }}>
@@ -294,7 +296,7 @@ const CompareTable: FC<CompareTableProps> = ({
         </Box>
         <ContextMenu
           cssClass={classes.contextMenu}
-          dataSource={[{text: 'test'}]}
+          dataSource={contextData}
           itemRender={renderComparisonItem}
           target={`#context-menu-${cellData.rowIndex}`}
           onItemClick={(e) => { handleSelectOption(e) }}
