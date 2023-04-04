@@ -5,6 +5,7 @@ import { IComparisonType, Status } from '../utils/types';
 
 import fakeData from '../hooks/data';
 import CompareHeader from '../components/CompareHeader';
+import { useWindowSize } from '../utils';
 
 const initialStatus: Status = {
   page: 1,
@@ -40,6 +41,8 @@ const Comparison: FC = () => {
     columnSequence: []
   })
 
+  const size = useWindowSize();
+
   const handleStatus = (values: Status) => setStatus(values);
 
   const deleteColumn = (columnKey: string) => {
@@ -47,7 +50,7 @@ const Comparison: FC = () => {
     const columnDataBuf = (sourceBuf.columnData.filter((column) => column.key !== columnKey))
     sourceBuf.columnData = columnDataBuf
     setInitialData(sourceBuf);
-    setStatus({...status})
+    setStatus({...status, totalPage: Math.ceil(sourceBuf.columnData.length / status.perPage)})
   }
 
   const sortColumn = () => {
@@ -131,6 +134,33 @@ const Comparison: FC = () => {
     handleViewStyle() 
   }, [isCompressedView])
 
+  useEffect(() => {
+    if (initialData.columnData.length > 0) {
+      size.width > 1200 &&
+        status.isSize &&
+        setStatus((prevState) => ({
+          ...prevState,
+          isSize: false,
+          totalPage: Math.ceil(initialData.columnData.length / 5),
+          perPage: 5
+        }));
+  
+      size.width <= 1200 &&
+        !status.isSize &&
+        setStatus((prevState) => ({
+          ...prevState,
+          isSize: true,
+          totalPage: Math.ceil(initialData.columnData.length / 3),
+          perPage: 3
+        }));
+  
+      setStatus((prevState) => ({
+        ...prevState,
+        width: (size.width - 0.15 * size.width - 420) / 6 + 'px'
+      }));
+    }
+  }, [size]);
+
   return (<>
     <CompareHeader
       status={status}
@@ -142,6 +172,7 @@ const Comparison: FC = () => {
       status={status}
       source={source}
       action={{deleteColumn: deleteColumn}}
+      handleStatus={handleStatus}
     />
     <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
     <button onClick={sortColumn}>Sort</button>

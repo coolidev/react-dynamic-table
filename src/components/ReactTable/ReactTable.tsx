@@ -56,7 +56,7 @@ export function ReactTable<T>({ data, columns, actions, compressed, status }: Pr
         <ReactTableHeader columns={columns} actions={actions} compressed={compressed} status={status} />
       </thead>
       <tbody>
-        <ReactTableRow data={data} columns={columns} />
+        <ReactTableRow data={data} columns={columns} compressed={compressed} status={status} />
       </tbody>
     </table>
   );

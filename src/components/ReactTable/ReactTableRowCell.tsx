@@ -6,6 +6,7 @@ import { useEffect, useState, useContext } from "react";
 
 import { IColumnType } from "./ReactTable";
 import { AlertContext } from "../../providers/alert";
+import { useWindowSize } from "../../utils";
 
 interface Props<T> {
   index: number;
@@ -57,13 +58,24 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
   const [options, setOptions] = useState<Option[]>()
   const [contextItems, setContextItems] = useState<IContextItem[]>([])
   const [isRowHeader, setIsRowHeader] = useState<boolean>(false)
+  const [columnWidth, setColumnWidth] = useState('')
   const value = lodash.get(item, column.key);
   const input = lodash.get<typeof item, string>(item, `input_${column.key}`)
   const output = lodash.get<typeof item, string>(item, `output_${column.key}`)
   const isCompressed = lodash.get(item, `isCompressed_${column.key}`)
   const isGroup = lodash.get(item, `isGroup_comparison`)
 
+  const size = useWindowSize();
+
   const { handleOpen, handleMessage } = useContext(AlertContext)
+
+  useEffect(() => {
+    if (size.width > 1200) {
+      setColumnWidth('8.1%');
+    } else {
+      setColumnWidth('13.5%');
+    }
+  }, [size]);
 
   useEffect(() => {
     if (column.key === 'comparison') {
@@ -110,7 +122,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
           {column.render ? column.render(column, item) : value}
         </span>
         {contextItems.length > 0 && <>
-          <ArrowDropDownIcon />
+          {/* <ArrowDropDownIcon /> */}
           <ContextMenu
             cssClass={classes.contextMenu}
             dataSource={contextItems}
@@ -124,27 +136,27 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
       {isCompressed ?
         (isGroup ?
           (<>
-            <td className={`${classes.groupField} row-group text-center`}>Output</td>
+            <td style={{ width: columnWidth, }} className={`${classes.groupField} row-group text-center`}>Output</td>
           </>) :
           (<>
-            {output && <td className={`${classes.normalField} text-center`}>
+            {output && <td style={{ width: columnWidth, }} className={`${classes.normalField} text-center`}>
               {output}
             </td>}
           </>)) :
         (isGroup ?
           (<>
-            <td className={`${classes.groupField} row-group text-center`} style={{ borderRight: 'none' }}>Input</td>
-            <td className={`${classes.groupField} row-group text-center`} style={{ borderLeft: 'none' }}>Output</td>
+            <td className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderRight: 'none' }}>Input</td>
+            <td className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>Output</td>
           </>) :
           (<>
-            {input ? <td className={`${classes.normalField} text-center`} style={{ borderRight: 'none' }}>
+            {input ? <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
               {input}
-            </td> : <td className={`${classes.normalField} text-center`} style={{ borderRight: 'none' }}>
+            </td> : <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
               - -
             </td>}
-            {output ? <td className={`${classes.normalField} text-center`} style={{ borderLeft: 'none' }}>
+            {output ? <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
               {output}
-            </td> : <td className={`${classes.normalField} text-center`} style={{ borderLeft: 'none' }}>
+            </td> : <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
               - -
             </td>}
           </>))}

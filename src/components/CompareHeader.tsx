@@ -19,11 +19,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'flex-end',
     color: `#e34747`,
     '& .MuiPaginationItem-root': {
-      backgroundColor: '#e34747',
-      color: 'lightgrey'
+      backgroundColor: 'transparent',
+      color: '#111111'
     },
     '& .Mui-selected': {
-      backgroundColor: '#e34747 !important'
+      backgroundColor: '#e34747 !important',
+      color: 'white'
     },
     '& .MuiPaginationItem-root:hover': {
       backgroundColor: '#e34747',

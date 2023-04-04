@@ -10,6 +10,7 @@ interface CompareTableProps {
   status: Status;
   source: IComparisonType;
   action: IActionType;
+  handleStatus: Function;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '16px 16px 0 0',
     border: `2px solid #e34747`,
     overflowY: 'hidden',
-    overflowX: 'hidden',
+    overflowX: 'auto',
   },
   table: {
     '& .MuiTableCell-root': {
@@ -29,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
 const CompareTable: FC<CompareTableProps> = ({
   status,
   source,
-  action
+  action,
+  handleStatus
 }) => {
   const classes = useStyles();
 
@@ -141,6 +143,10 @@ const CompareTable: FC<CompareTableProps> = ({
         }
         return sum
       })
+
+      if (Math.ceil(checkInPage[checkInPage.length - 1] / (status.perPage * 2)) !== status.totalPage) {
+        handleStatus((prevState: Status) => ({ ...prevState, totalPage: Math.ceil(checkInPage[checkInPage.length - 1] / (status.perPage * 2)) }));
+      }
 
       const processed = columnData[0].map((rowKey, idx) => {
         return columnData.filter((_, index) => {
