@@ -30,7 +30,6 @@ const Comparison: FC = () => {
   const [status, setStatus] = useState(initialStatus);
   const [sortString, setSortString] = useState<string>('')
   const [columnSequence, setColumnSequence] = useState<string[]>([])
-  const [isCompressedView, setIsCompressedView] = useState<boolean>(false)
   const [pageLoaded, setPageLoaded] = useState<boolean>(false)
 
   const [initialData, setInitialData] = useState<IComparisonType>({
@@ -123,17 +122,6 @@ const Comparison: FC = () => {
 
     handleColumnSequence();
   }, [sortString])
-
-  useEffect(() => {
-    const handleViewStyle = () => {
-      setStatus((prevState) => ({
-        ...prevState,
-        isCompressedView
-      }))
-    }
-
-    handleViewStyle() 
-  }, [isCompressedView])
 
   useEffect(() => {
     if (initialData.columnData.length > 0) {

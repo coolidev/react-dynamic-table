@@ -6,7 +6,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import type { ICellType, IColumnType, IComparisonType, IData, IRowBreakdownOption, IRowType, Status } from '../utils/types';
-import { ReactTable } from './ReactTable/ReactTable';
+// import { ReactTable } from './ReactTable/ReactTable';
 import type { IActionType } from './ReactTable/ReactTable'
 import { ContextMenu, DataGrid } from 'devextreme-react';
 import { Column, Pager, Scrolling } from 'devextreme-react/data-grid';
@@ -331,7 +331,11 @@ const CompareTable: FC<CompareTableProps> = ({
       value = cellData.value
     }
     if (cellData.data.isGroup_comparison) {
-      value = "Input";
+      if (cellData.rowIndex === 0) {
+        value = "Input";
+      } else {
+        value = '';
+      }
     }
     return renderGroupCell(cellData, value);
   }
@@ -342,7 +346,11 @@ const CompareTable: FC<CompareTableProps> = ({
       value = cellData.value
     }
     if (cellData.data.isGroup_comparison) {
-      value = "Output";
+      if (cellData.rowIndex === 0) {
+        value = "Output";
+      } else {
+        value = '';
+      }
     }
     return renderGroupCell(cellData, value);
   }
