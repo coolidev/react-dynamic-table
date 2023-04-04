@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, Table, TableBody, TableHead, Theme } from "@material-ui/core";
 import { Status } from "../../utils/types";
 import { ReactTableHeader } from "./ReactTableHeader";
 import { ReactTableRow } from "./ReactTableRow";
@@ -51,13 +51,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 export function ReactTable<T>({ data, columns, actions, compressed, status }: Props<T>): JSX.Element {
   const classes = useStyles();
   return (
-    <table className={classes.root}>
-      <thead>
+    <Table className={classes.root}>
+      <TableHead>
         <ReactTableHeader columns={columns} actions={actions} compressed={compressed} status={status} />
-      </thead>
-      <tbody>
+      </TableHead>
+      <TableBody>
         <ReactTableRow data={data} columns={columns} compressed={compressed} status={status} />
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

@@ -6,6 +6,7 @@ import { IComparisonType, Status } from '../utils/types';
 import fakeData from '../hooks/data';
 import CompareHeader from '../components/CompareHeader';
 import { useWindowSize } from '../utils';
+import { Button, Grid, Input } from '@material-ui/core';
 
 const initialStatus: Status = {
   page: 1,
@@ -174,8 +175,10 @@ const Comparison: FC = () => {
       action={{deleteColumn: deleteColumn}}
       handleStatus={handleStatus}
     />
-    <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
-    <button onClick={sortColumn}>Sort</button>
+    <Grid container alignContent='center' alignItems='center' style={{ padding: '16px' }}>
+      <Input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
+      <Button onClick={sortColumn}>Sort</Button>
+    </Grid>
   </>
   );
 };

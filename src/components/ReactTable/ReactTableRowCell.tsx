@@ -1,4 +1,4 @@
-import { makeStyles, MenuItem, Theme } from "@material-ui/core";
+import { makeStyles, MenuItem, TableCell, Theme } from "@material-ui/core";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { ContextMenu } from "devextreme-react";
 import lodash from "lodash";
@@ -115,7 +115,7 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
 
   return (<>
     {isRowHeader ? (<>
-      <td id={`context-menu-${index}`}
+      <TableCell id={`context-menu-${index}`}
         className={isGroup ? classes.groupField : classes.normalField}
       >
         <span>
@@ -131,34 +131,34 @@ export function ReactTableRowCell<T>({ item, column, index }: Props<T>): JSX.Ele
             onItemClick={(e) => { handleSelectOption(e) }}
           />
         </>}
-      </td>
+      </TableCell>
     </>) : (<>
       {isCompressed ?
         (isGroup ?
           (<>
-            <td style={{ width: columnWidth, }} className={`${classes.groupField} row-group text-center`}>Output</td>
+            <TableCell style={{ width: columnWidth, }} className={`${classes.groupField} row-group text-center`}>Output</TableCell>
           </>) :
           (<>
-            {output && <td style={{ width: columnWidth, }} className={`${classes.normalField} text-center`}>
+            {output && <TableCell style={{ width: columnWidth, }} className={`${classes.normalField} text-center`}>
               {output}
-            </td>}
+            </TableCell>}
           </>)) :
         (isGroup ?
           (<>
-            <td className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderRight: 'none' }}>Input</td>
-            <td className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>Output</td>
+            <TableCell className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderRight: 'none' }}>Input</TableCell>
+            <TableCell className={`${classes.groupField} row-group text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>Output</TableCell>
           </>) :
           (<>
-            {input ? <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
+            {input ? <TableCell className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
               {input}
-            </td> : <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
+            </TableCell> : <TableCell className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderRight: 'none' }}>
               - -
-            </td>}
-            {output ? <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
+            </TableCell>}
+            {output ? <TableCell className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
               {output}
-            </td> : <td className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
+            </TableCell> : <TableCell className={`${classes.normalField} text-center`} style={{ width: columnWidth, borderLeft: 'none' }}>
               - -
-            </td>}
+            </TableCell>}
           </>))}
     </>
     )}

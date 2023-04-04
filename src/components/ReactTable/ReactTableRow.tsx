@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, TableRow, Theme } from "@material-ui/core";
 import { IColumnType } from "./ReactTable";
 import { ReactTableRowCell } from "./ReactTableRowCell";
 import { Status } from "../../utils/types";
@@ -36,7 +36,7 @@ export function ReactTableRow<T>({ data, columns, compressed, status }: Props<T>
   return (
     <>
       {data.map((item, itemIndex) => (
-        <tr key={`table-body-${itemIndex}`} className={classes.root}>
+        <TableRow key={`table-body-${itemIndex}`} className={classes.root}>
           {columns.map((column, columnIndex) => (
             <ReactTableRowCell
               key={`table-row-cell-${columnIndex}`}
@@ -46,7 +46,7 @@ export function ReactTableRow<T>({ data, columns, compressed, status }: Props<T>
             />
           ))}
           <td colSpan={10 - compressed.map((value) => isCompressedView && !value ? 2 : 1).reduce((partialSum, a) => partialSum + a, 0)}></td>
-        </tr>
+        </TableRow>
       ))}
     </>
   );

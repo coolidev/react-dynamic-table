@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import {
+  Grid,
   makeStyles,
 } from '@material-ui/core';
 import type { ICellType, IColumnType, IComparisonType, IData, IRowBreakdownOption, IRowType, Status } from '../utils/types';
@@ -187,7 +188,7 @@ const CompareTable: FC<CompareTableProps> = ({
   }, [columns, rowNames])
 
   return (
-    <div data-rank-table='true' className={classes.root}>
+    <Grid data-rank-table='true' className={classes.root}>
       <ReactTable
         data={cellData}
         columns={columns}
@@ -195,7 +196,7 @@ const CompareTable: FC<CompareTableProps> = ({
         actions={{ deleteColumn: action.deleteColumn }}
         status={status}
       />
-    </div>
+    </Grid>
   );
 };
 
