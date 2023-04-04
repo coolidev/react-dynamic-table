@@ -1,15 +1,25 @@
-import { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import {
+  Box,
+  Grid,
+  MenuItem,
   makeStyles,
 } from '@material-ui/core';
 import type { ICellType, IColumnType, IComparisonType, IData, IRowBreakdownOption, IRowType, Status } from '../utils/types';
 import { ReactTable } from './ReactTable/ReactTable';
 import type { IActionType } from './ReactTable/ReactTable'
+import { ContextMenu, DataGrid } from 'devextreme-react';
+import { Column, Pager, Scrolling } from 'devextreme-react/data-grid';
+import { AlertContext } from '../providers/alert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbtack, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface CompareTableProps {
   status: Status;
   source: IComparisonType;
   action: IActionType;
+  handleStatus: Function;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -18,18 +28,92 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '16px 16px 0 0',
     border: `2px solid #e34747`,
     overflowY: 'hidden',
-    overflowX: 'hidden',
+    overflowX: 'auto',
   },
   table: {
-    '& .MuiTableCell-root': {
+    '& .dx-datagrid-headers': {
+      backgroundColor: '#e34747',
+    },
+    '& table': {
+      borderSpacing: '0',
+      '& tr.dx-header-row': {
+        backgroundColor: '#e34747!important',
+        '& td': {
+          border: '1px solid #e34747',
+        }
+      },
+      '& tr.dx-header-row:nth-child(2)': {
+        '& td': {
+          height: '0',
+          border: '1px solid #e34747',
+        }
+      }
     }
+  },
+  tableHeader: {
+    backgroundColor: '#e34747',
+    height: '3rem',
+    padding: '0',
+    border: '1px solid #e34747',
+    color: 'white',
+    fontSize: '1.25rem',
+  },
+  contextMenu: {
+    width: '200px !important',
+    '& ul': {
+      listStyle: 'none',
+      padding: '0',
+      '& li': {
+        borderBottom: '1px solid grey',
+      },
+      '& li:last-child': {
+        borderBottom: 'none',
+      },
+    }
+  },
+  groupField: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: 'rgb(220, 220, 220)',
+    fontSize: '1rem',
+  },
+  normalField: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    fontSize: '0.875rem',
+  },
+  cell: {
+    backgroundColor: 'white',
+    height: '3rem',
+    padding: '0',
+    border: '1px solid rgb(220, 220, 220)',
+  },
+  inputCell: {
+    borderRight: 'none'
+  },
+  outputCell: {
+    borderLeft: 'none'
+  },
+  lastCell: {
+    width: '100%',
+    border: '1px solid rgb(220, 220, 220)',
+  },
+  removeBtn: {
+    cursor: 'pointer',
+    color: '#e34747'
   },
 }));
 
 const CompareTable: FC<CompareTableProps> = ({
   status,
   source,
-  action
+  action,
+  handleStatus
 }) => {
   const classes = useStyles();
 
@@ -39,6 +123,8 @@ const CompareTable: FC<CompareTableProps> = ({
   const [rowNames, setRowNames] = useState<IRowType<IData>[]>([])
   const [rowBreakdownOptions, setRowBreakdownOptions] = useState<IRowBreakdownOption<IData>[]>([])
   const [cellData, setCellData] = useState<IData[]>([])
+
+  const { handleOpen, handleMessage } = useContext(AlertContext)
 
   useEffect(() => {
     if (source !== undefined) {
@@ -142,6 +228,10 @@ const CompareTable: FC<CompareTableProps> = ({
         return sum
       })
 
+      if (Math.ceil(checkInPage[checkInPage.length - 1] / (status.perPage * 2)) !== status.totalPage) {
+        handleStatus((prevState: Status) => ({ ...prevState, totalPage: Math.ceil(checkInPage[checkInPage.length - 1] / (status.perPage * 2)) }));
+      }
+
       const processed = columnData[0].map((rowKey, idx) => {
         return columnData.filter((_, index) => {
           return status.isCompressedView ?
@@ -180,16 +270,174 @@ const CompareTable: FC<CompareTableProps> = ({
     }
   }, [columns, rowNames])
 
+  const handleSelectOption = (e: any) => {
+    if (!e.itemData.items) {
+      handleMessage(e.itemData.text)
+      handleOpen(true)
+    }
+  }
+
+  const renderComparisonItem = (data: any, index: number) => {
+    return (
+      <MenuItem>
+        {data.text}
+      </MenuItem>
+    );
+  }
+
+  const ComparisonCell = (cellData: any) => {
+    const rowBreakdownOptions = cellData.data.rowBreakdownOptions ? cellData.data.rowBreakdownOptions : []
+    const contextData = rowBreakdownOptions.map((option: any) => ({ key: option.key, text: option.name }))
+
+    return (
+      <Grid id={`context-menu-${cellData.rowIndex}`} className={cellData.data.isGroup_comparison ? classes.groupField : classes.normalField}>
+        <Box style={{ paddingLeft: '0.5rem' }}>
+          {cellData.value}
+        </Box>
+        <ContextMenu
+          cssClass={classes.contextMenu}
+          dataSource={contextData}
+          itemRender={renderComparisonItem}
+          target={`#context-menu-${cellData.rowIndex}`}
+          onItemClick={(e) => { handleSelectOption(e) }}
+        />
+      </Grid>
+    );
+  }
+
+  const renderGroupCell = (cellData: any, value: string) => {
+    if (cellData.data.isGroup_comparison) {
+      return (
+        <Box className={classes.groupField}>
+          <Box style={{ paddingLeft: '0.5rem' }}>
+            {value}
+          </Box>
+        </Box>
+      )
+    } else {
+      return (
+        <Box className={classes.normalField}>
+          <Box style={{ paddingLeft: '0.5rem' }}>
+            {value}
+          </Box>
+        </Box>
+      )
+    }
+  }
+
+  const renderInputCell = (cellData: any) => {
+    let value = '- -';
+    if (cellData.value) {
+      value = cellData.value
+    }
+    if (cellData.data.isGroup_comparison) {
+      value = "Input";
+    }
+    return renderGroupCell(cellData, value);
+  }
+
+  const renderOutputCell = (cellData: any) => {
+    let value = '- -';
+    if (cellData.value) {
+      value = cellData.value
+    }
+    if (cellData.data.isGroup_comparison) {
+      value = "Output";
+    }
+    return renderGroupCell(cellData, value);
+  }
+
   return (
-    <div data-rank-table='true' className={classes.root}>
-      <ReactTable
+    <Grid data-rank-table='true' className={classes.root}>
+      {/* <ReactTable
         data={cellData}
         columns={columns}
         compressed={compInPage}
         actions={{ deleteColumn: action.deleteColumn }}
         status={status}
-      />
-    </div>
+      /> */}
+      <DataGrid
+        dataSource={cellData}
+        columnAutoWidth={true}
+        className={classes.table}
+        showColumnLines={false}
+      >
+        <Pager
+          visible={false}
+        />
+        <Scrolling mode="infinite" />
+        {columns.map((column: IColumnType<IData>, columnIdx: number) => {
+          if (column.key === 'comparison') {
+            return (
+              <Column
+                key={columnIdx}
+                headerCellRender={() => <Box style={{ paddingLeft: '0.5rem' }}>
+                  {column.name}
+                </Box>}
+                cssClass={classes.tableHeader}
+              >
+                <Column
+                  dataField={column.key}
+                  headerCellRender={() => <></>}
+                  dataType={"string"}
+                  width={300}
+                  cellRender={ComparisonCell}
+                  cssClass={classes.cell}
+                />
+              </Column>
+            )
+          } else {
+            return (
+              <Column
+                key={columnIdx}
+                headerCellRender={() => 
+                  <>
+                    {column.name}
+                    {column.removeEnabled && (status.page === 1 && columnIdx === 1 ?
+                      <FontAwesomeIcon
+                        icon={faThumbtack as IconProp}
+                        style = {{color: 'white'}}
+                        size="sm"
+                      /> :
+                      <FontAwesomeIcon
+                        icon={ faTrash as IconProp }
+                        style={{ color: 'white' }}
+                        size="sm"
+                        onClick={() => {action.deleteColumn(column.key)}}
+                        className={classes.removeBtn}
+                      />
+                    )}
+                  </>
+                }
+                alignment={"center"}
+                cssClass={classes.tableHeader}
+              >
+                {!compressed[columnIdx] && <Column
+                  dataField={`input_${column.key}`}
+                  headerCellRender={() => <></>}
+                  dataType={"string"}
+                  width={150}
+                  cellRender={renderInputCell}
+                  cssClass={`${classes.cell} ${classes.inputCell}`}
+                />}
+                <Column
+                  dataField={`output_${column.key}`}
+                  headerCellRender={() => <></>}
+                  dataType={"string"}
+                  width={150}
+                  cellRender={renderOutputCell}
+                  cssClass={`${classes.cell} ${!compressed[columnIdx] && classes.outputCell}`}
+                />
+              </Column>
+            )
+          }
+        })}
+        <Column
+          headerCellRender={() => <></>}
+          cssClass={classes.lastCell}
+        />
+      </DataGrid>
+    </Grid>
   );
 };
 

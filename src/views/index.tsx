@@ -5,6 +5,8 @@ import { IComparisonType, Status } from '../utils/types';
 
 import fakeData from '../hooks/data';
 import CompareHeader from '../components/CompareHeader';
+import { useWindowSize } from '../utils';
+import { Button, Grid, Input } from '@material-ui/core';
 
 const initialStatus: Status = {
   page: 1,
@@ -40,6 +42,8 @@ const Comparison: FC = () => {
     columnSequence: []
   })
 
+  const size = useWindowSize();
+
   const handleStatus = (values: Status) => setStatus(values);
 
   const deleteColumn = (columnKey: string) => {
@@ -47,7 +51,7 @@ const Comparison: FC = () => {
     const columnDataBuf = (sourceBuf.columnData.filter((column) => column.key !== columnKey))
     sourceBuf.columnData = columnDataBuf
     setInitialData(sourceBuf);
-    setStatus({...status})
+    setStatus({...status, totalPage: Math.ceil(sourceBuf.columnData.length / status.perPage)})
   }
 
   const sortColumn = () => {
@@ -131,6 +135,17 @@ const Comparison: FC = () => {
     handleViewStyle() 
   }, [isCompressedView])
 
+  useEffect(() => {
+    if (initialData.columnData.length > 0) {
+      const count = Math.floor((size.width - 48) / 300) - 1
+      setStatus((prevState) => ({
+        ...prevState,
+        perPage: count,
+        totalPage: Math.ceil(initialData.columnData.length / count)
+      }))
+    }
+  }, [size]);
+
   return (<>
     <CompareHeader
       status={status}
@@ -142,9 +157,12 @@ const Comparison: FC = () => {
       status={status}
       source={source}
       action={{deleteColumn: deleteColumn}}
+      handleStatus={handleStatus}
     />
-    <input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
-    <button onClick={sortColumn}>Sort</button>
+    <Grid container alignContent='center' alignItems='center' style={{ padding: '16px' }}>
+      <Input type={'text'} value={sortString} onChange={(e) => {setSortString(e.target.value);}} />
+      <Button onClick={sortColumn}>Sort</Button>
+    </Grid>
   </>
   );
 };
