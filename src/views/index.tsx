@@ -137,28 +137,12 @@ const Comparison: FC = () => {
 
   useEffect(() => {
     if (initialData.columnData.length > 0) {
-      size.width > 1200 &&
-        status.isSize &&
-        setStatus((prevState) => ({
-          ...prevState,
-          isSize: false,
-          totalPage: Math.ceil(initialData.columnData.length / 5),
-          perPage: 5
-        }));
-  
-      size.width <= 1200 &&
-        !status.isSize &&
-        setStatus((prevState) => ({
-          ...prevState,
-          isSize: true,
-          totalPage: Math.ceil(initialData.columnData.length / 3),
-          perPage: 3
-        }));
-  
+      const count = Math.floor((size.width - 48) / 300) - 1
       setStatus((prevState) => ({
         ...prevState,
-        width: (size.width - 0.15 * size.width - 420) / 6 + 'px'
-      }));
+        perPage: count,
+        totalPage: Math.ceil(initialData.columnData.length / count)
+      }))
     }
   }, [size]);
 
